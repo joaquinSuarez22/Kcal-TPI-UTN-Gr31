@@ -1,0 +1,273 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/background_light">
+
+    <!-- CONTENIDO -->
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_above="@id/bottomNav">
+
+        <LinearLayout
+            android:orientation="vertical"
+            android:padding="20dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <!-- HEADER -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center_vertical">
+
+                <TextView
+                    android:text="Kcal"
+                    android:textSize="24sp"
+                    android:textStyle="bold"
+                    android:textColor="@color/secondary"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"/>
+
+            </LinearLayout>
+
+
+            <!-- TARJETA RESUMEN DIARIO -->
+            <LinearLayout
+                android:orientation="vertical"
+                android:padding="18dp"
+                android:layout_marginTop="20dp"
+                android:background="@android:color/white"
+                android:elevation="3dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <!-- titulo -->
+                <TextView
+                    android:text="Resumen diario"
+                    android:textSize="18sp"
+                    android:textStyle="bold"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"/>
+
+                <!-- progreso -->
+                <LinearLayout
+                    android:layout_marginTop="12dp"
+                    android:orientation="horizontal"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <TextView
+                        android:text="Progreso del día"
+                        android:textColor="#777"
+                        android:layout_weight="1"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"/>
+
+                    <TextView
+                        android:text="1450 / 2200 kcal"
+                        android:textColor="@color/primary"
+                        android:textStyle="bold"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"/>
+
+                </LinearLayout>
+
+                <!-- barra progreso -->
+                <ProgressBar
+                    android:id="@+id/progresoCalorias"
+                    style="?android:attr/progressBarStyleHorizontal"
+                    android:layout_marginTop="8dp"
+                    android:progress="65"
+                    android:max="100"
+                    android:layout_width="match_parent"
+                    android:layout_height="10dp"/>
+
+                <!-- stats -->
+                <LinearLayout
+                    android:layout_marginTop="15dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <LinearLayout
+                        android:orientation="vertical"
+                        android:layout_weight="1"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content">
+
+                        <TextView
+                            android:text="Objetivo"
+                            android:textSize="12sp"
+                            android:textColor="#777"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"/>
+
+                        <TextView
+                            android:text="2200 kcal"
+                            android:textStyle="bold"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"/>
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:orientation="vertical"
+                        android:layout_weight="1"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content">
+
+                        <TextView
+                            android:text="Restantes"
+                            android:textSize="12sp"
+                            android:textColor="#777"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"/>
+
+                        <TextView
+                            android:text="750 kcal"
+                            android:textColor="@color/primary"
+                            android:textStyle="bold"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"/>
+
+                    </LinearLayout>
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+
+            <!-- ACCESO RAPIDO -->
+            <TextView
+                android:text="Acceso rapido"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                android:layout_marginTop="25dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+
+
+            <!-- BOTON PRINCIPAL -->
+            <Button
+                android:id="@+id/BtnRegisComida"
+                android:text="Registrar comida"
+                android:textColor="@android:color/white"
+                android:textStyle="bold"
+                android:backgroundTint="@color/primary"
+                android:layout_marginTop="12dp"
+                android:layout_width="match_parent"
+                android:layout_height="55dp"/>
+
+
+            <!-- GRID TARJETAS -->
+            <GridLayout
+                android:columnCount="2"
+                android:layout_marginTop="15dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <!-- PERFIL -->
+                <LinearLayout
+                    android:id="@+id/BtnPerfil"
+                    android:orientation="vertical"
+                    android:padding="16dp"
+                    android:layout_margin="8dp"
+                    android:background="@android:color/white"
+                    android:elevation="2dp"
+                    android:layout_width="0dp"
+                    android:layout_columnWeight="1"
+                    android:layout_height="wrap_content">
+
+                    <TextView
+                        android:text="Perfil"
+                        android:textStyle="bold"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"/>
+
+                </LinearLayout>
+
+                <!-- HISTORIAL -->
+                <LinearLayout
+                    android:id="@+id/BtnHistorial"
+                    android:orientation="vertical"
+                    android:padding="16dp"
+                    android:layout_margin="8dp"
+                    android:background="@android:color/white"
+                    android:elevation="2dp"
+                    android:layout_width="0dp"
+                    android:layout_columnWeight="1"
+                    android:layout_height="wrap_content">
+
+                    <TextView
+                        android:text="Historial"
+                        android:textStyle="bold"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"/>
+
+                </LinearLayout>
+
+                <!-- ESTADISTICAS -->
+                <LinearLayout
+                    android:id="@+id/BtnEstadisticas"
+                    android:orientation="vertical"
+                    android:padding="16dp"
+                    android:layout_margin="8dp"
+                    android:background="@android:color/white"
+                    android:elevation="2dp"
+                    android:layout_width="0dp"
+                    android:layout_columnWeight="1"
+                    android:layout_height="wrap_content">
+
+                    <TextView
+                        android:text="Estadisticas"
+                        android:textStyle="bold"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"/>
+
+                </LinearLayout>
+
+                <!-- SUGERENCIAS -->
+                <LinearLayout
+                    android:id="@+id/BtnRecomendaciones"
+                    android:orientation="vertical"
+                    android:padding="16dp"
+                    android:layout_margin="8dp"
+                    android:background="@android:color/white"
+                    android:elevation="2dp"
+                    android:layout_width="0dp"
+                    android:layout_columnWeight="1"
+                    android:layout_height="wrap_content">
+
+                    <TextView
+                        android:text="Sugerencias"
+                        android:textStyle="bold"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"/>
+
+                </LinearLayout>
+
+            </GridLayout>
+
+        </LinearLayout>
+
+    </ScrollView>
+
+
+    <!-- MENU INFERIOR -->
+    <com.google.android.material.bottomnavigation.BottomNavigationView
+        android:id="@+id/bottomNav"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:background="@android:color/white"
+        app:itemIconTint="@color/primary"
+        app:itemTextColor="@color/primary"
+        app:menu="@menu/menu_inferior"/>
+
+</RelativeLayout>
