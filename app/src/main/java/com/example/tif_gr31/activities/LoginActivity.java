@@ -27,7 +27,7 @@ public class LoginActivity extends AppCompatActivity {
         });
         /// botones
         Button BtnRegistrar=findViewById(R.id.BtnRegistrar);
-        Button BtnMenu=findViewById(R.id.BtnInicio);
+        Button BtnMenu=findViewById(R.id.loginBtn);
 
         ///  el evento click por si no esta registrado
         BtnRegistrar.setOnClickListener(new View.OnClickListener() {

@@ -26,13 +26,22 @@ public class RegistroActivity extends AppCompatActivity {
             return insets;
         });
         /// botones
-        Button BtnConfirmar=findViewById(R.id.BtnConfirmar);
+        Button BtnConfirmar=findViewById(R.id.BtnRegistrar);
+        Button BtnRegresar=findViewById(R.id.btnYaCuenta);
 
         /// evento para ir al menu
         BtnConfirmar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent= new Intent(RegistroActivity.this, InicioActivity.class);
+                startActivity(intent);
+            }
+        });
+        /// evento clcik para volver al login
+        BtnRegresar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent= new Intent(RegistroActivity.this, LoginActivity.class);
                 startActivity(intent);
             }
         });
