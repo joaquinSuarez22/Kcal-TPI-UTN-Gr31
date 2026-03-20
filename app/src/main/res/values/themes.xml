@@ -1,9 +1,33 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
     <!-- Base application theme. -->
-    <style name="Base.Theme.TIF_Gr31" parent="Theme.Material3.DayNight.NoActionBar">
-        <!-- Customize your light theme here. -->
-        <!-- <item name="colorPrimary">@color/my_light_primary</item> -->
+    <style name="Base.Theme.TIF_Gr31" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+        <!-- Primary brand color. -->
+        <item name="colorPrimary">@color/primary</item>
+        <item name="colorPrimaryVariant">@color/secondary</item>
+        <item name="colorOnPrimary">@color/white</item>
+        <!-- Secondary brand color. -->
+        <item name="colorSecondary">@color/accent</item>
+        <item name="colorSecondaryVariant">@color/secondary</item>
+        <item name="colorOnSecondary">@color/black</item>
+        <!-- Status bar color. -->
+        <item name="android:statusBarColor">?attr/colorPrimaryVariant</item>
+
+        <!-- DEFAULT FONT (BODY) -->
+        <item name="android:fontFamily">@font/open_sans</item>
     </style>
 
     <style name="Theme.TIF_Gr31" parent="Base.Theme.TIF_Gr31" />
+
+    <!-- Style for Headings -->
+    <style name="TextAppearance.Kcal.Heading" parent="TextAppearance.MaterialComponents.Headline4">
+        <item name="android:fontFamily">@font/raleway</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:textColor">@color/secondary</item>
+    </style>
+
+    <style name="TextAppearance.Kcal.SubHeading" parent="TextAppearance.MaterialComponents.Headline6">
+        <item name="android:fontFamily">@font/raleway</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:textColor">@color/secondary</item>
+    </style>
 </resources>

@@ -1,16 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <!-- Colores base -->
+    <color name="white">#FFFFFF</color>
+    <color name="black">#000000</color>
 
-<!-- Color principal -->
-<color name="primary">#1C7C54</color>
+    <!-- Color principal -->
+    <color name="primary">#1C7C54</color>
 
-<!-- Verde oscuro -->
-<color name="secondary">#1B512D</color>
+    <!-- Verde oscuro -->
+    <color name="secondary">#1B512D</color>
 
-<!-- Verde menta -->
-<color name="accent">#73E2A7</color>
+    <!-- Verde menta -->
+    <color name="accent">#73E2A7</color>
 
-<!-- Fondo claro -->
-<color name="background_light">#DEF4C6</color>
-
+    <!-- Fondo claro -->
+    <color name="background_light">#DEF4C6</color>
 </resources>

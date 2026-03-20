@@ -1,111 +1,138 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#F6F8F7">
+    android:background="@color/background_light">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:padding="20dp">
+        android:padding="24dp">
 
-        <!-- Header -->
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:gravity="center_vertical">
-
-
+        <!-- Logo/Header Space -->
+        <FrameLayout
+            android:layout_width="64dp"
+            android:layout_height="64dp"
+            android:layout_gravity="center"
+            android:layout_marginTop="20dp"
+            android:background="@drawable/circulo_fondo">
 
             <TextView
-                android:layout_width="0dp"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="Registro"
-                android:textStyle="bold"
-                android:textSize="18sp"
-                android:gravity="center"/>
-        </LinearLayout>
+                android:layout_gravity="center"
+                android:text="K"
+                android:textColor="@color/primary"
+                android:textSize="32sp"
+                android:fontFamily="@font/raleway"
+                android:textStyle="bold" />
+        </FrameLayout>
 
         <!-- Título -->
         <TextView
+            style="@style/TextAppearance.Kcal.Heading"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginTop="24dp"
+            android:gravity="center"
             android:text="Crear cuenta"
-            android:textSize="26sp"
-            android:textStyle="bold"
-            android:layout_marginTop="20dp"/>
+            android:textSize="28sp" />
 
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Introduce tus datos para empezar a trackear tus calorías y mejorar tu alimentación."
-            android:layout_marginBottom="20dp"/>
+            android:layout_marginBottom="32dp"
+            android:gravity="center"
+            android:text="Únete a Kcal y empieza a mejorar tu alimentación hoy mismo."
+            android:textColor="#475569"
+            android:textSize="14sp" />
 
         <!-- Email -->
-        <EditText
-            android:id="@+id/emailRegister"
-            android:layout_width="match_parent"
-            android:layout_height="55dp"
-            android:hint="ejemplo@correo.com"
-            android:inputType="textEmailAddress"
-            android:padding="12dp"
-            android:layout_marginBottom="10dp"/>
-
-        <!-- Password -->
-        <EditText
-            android:id="@+id/passwordRegister"
-            android:layout_width="match_parent"
-            android:layout_height="55dp"
-            android:hint="Contraseña"
-            android:inputType="textPassword"
-            android:padding="12dp"
-            android:layout_marginBottom="10dp"/>
-
-        <!-- Repeat Password -->
-        <EditText
-            android:id="@+id/repeatPassword"
-            android:layout_width="match_parent"
-            android:layout_height="55dp"
-            android:hint="Repetir contraseña"
-            android:inputType="textPassword"
-            android:padding="12dp"
-            android:layout_marginBottom="10dp"/>
-
-        <!-- Checkbox -->
-        <LinearLayout
+        <com.google.android.material.textfield.TextInputLayout
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:layout_marginTop="10dp">
+            android:layout_marginBottom="16dp"
+            android:hint="Email"
+            app:boxStrokeColor="@color/primary"
+            app:hintTextColor="@color/primary"
+            app:startIconDrawable="@android:drawable/ic_dialog_email"
+            app:startIconTint="@color/primary">
 
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/emailRegister"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="textEmailAddress" />
+        </com.google.android.material.textfield.TextInputLayout>
 
+        <!-- Password -->
+        <com.google.android.material.textfield.TextInputLayout
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp"
+            android:hint="Contraseña"
+            app:boxStrokeColor="@color/primary"
+            app:hintTextColor="@color/primary"
+            app:passwordToggleEnabled="true"
+            app:startIconDrawable="@android:drawable/ic_lock_idle_lock"
+            app:startIconTint="@color/primary">
 
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/passwordRegister"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="textPassword" />
+        </com.google.android.material.textfield.TextInputLayout>
 
-        </LinearLayout>
+        <!-- Repeat Password -->
+        <com.google.android.material.textfield.TextInputLayout
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="24dp"
+            android:hint="Repetir contraseña"
+            app:boxStrokeColor="@color/primary"
+            app:hintTextColor="@color/primary"
+            app:passwordToggleEnabled="true"
+            app:startIconDrawable="@android:drawable/ic_lock_idle_lock"
+            app:startIconTint="@color/primary">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/repeatPassword"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="textPassword" />
+        </com.google.android.material.textfield.TextInputLayout>
 
         <!-- Botón registrar -->
-        <Button
+        <com.google.android.material.button.MaterialButton
             android:id="@+id/BtnRegistrar"
             android:layout_width="match_parent"
-            android:layout_height="60dp"
+            android:layout_height="56dp"
+            android:backgroundTint="@color/primary"
             android:text="Registrarme"
+            android:textAllCaps="false"
             android:textColor="#FFFFFF"
-            android:backgroundTint="#1c7d55"
-            android:layout_marginTop="20dp"/>
+            android:textSize="18sp"
+            android:textStyle="bold"
+            app:cornerRadius="12dp" />
 
         <!-- Ya tengo cuenta -->
-        <Button
+        <com.google.android.material.button.MaterialButton
             android:id="@+id/btnYaCuenta"
+            style="@style/Widget.MaterialComponents.Button.TextButton"
             android:layout_width="match_parent"
-            android:layout_height="50dp"
-            android:text="Ya tengo cuenta"
-            android:textColor="#1c7d55"
-            android:background="@android:color/transparent"
-            android:layout_marginTop="10dp"/>
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:text="Ya tengo cuenta, iniciar sesión"
+            android:textAllCaps="false"
+            android:textColor="@color/primary"
+            android:textStyle="bold" />
 
     </LinearLayout>
 

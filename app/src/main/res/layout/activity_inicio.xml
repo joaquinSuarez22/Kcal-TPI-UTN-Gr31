@@ -1,7 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-
-<RelativeLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/main"
     android:layout_width="match_parent"
@@ -15,243 +13,252 @@
         android:layout_above="@id/bottomNav">
 
         <LinearLayout
-            android:orientation="vertical"
-            android:padding="20dp"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="20dp">
 
             <!-- HEADER -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:gravity="center_vertical">
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
 
                 <TextView
-                    android:text="Kcal"
-                    android:textSize="24sp"
-                    android:textStyle="bold"
-                    android:textColor="@color/secondary"
+                    style="@style/TextAppearance.Kcal.Heading"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"/>
+                    android:layout_height="wrap_content"
+                    android:text="Kcal"
+                    android:textSize="28sp" />
 
             </LinearLayout>
 
 
             <!-- TARJETA RESUMEN DIARIO -->
-            <LinearLayout
-                android:orientation="vertical"
-                android:padding="18dp"
-                android:layout_marginTop="20dp"
-                android:background="@android:color/white"
-                android:elevation="3dp"
+            <com.google.android.material.card.MaterialCardView
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                app:cardBackgroundColor="@android:color/white"
+                app:cardCornerRadius="16dp"
+                app:cardElevation="4dp">
 
-                <!-- titulo -->
-                <TextView
-                    android:text="Resumen diario"
-                    android:textSize="18sp"
-                    android:textStyle="bold"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"/>
-
-                <!-- progreso -->
-                <LinearLayout
-                    android:layout_marginTop="12dp"
-                    android:orientation="horizontal"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
-
-                    <TextView
-                        android:text="Progreso del día"
-                        android:textColor="#777"
-                        android:layout_weight="1"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"/>
-
-                    <TextView
-                        android:text="1450 / 2200 kcal"
-                        android:textColor="@color/primary"
-                        android:textStyle="bold"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"/>
-
-                </LinearLayout>
-
-                <!-- barra progreso -->
-                <ProgressBar
-                    android:id="@+id/progresoCalorias"
-                    style="?android:attr/progressBarStyleHorizontal"
-                    android:layout_marginTop="8dp"
-                    android:progress="65"
-                    android:max="100"
-                    android:layout_width="match_parent"
-                    android:layout_height="10dp"/>
-
-                <!-- stats -->
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="15dp"
-                    android:orientation="horizontal">
+                    android:orientation="vertical"
+                    android:padding="18dp">
 
-                    <LinearLayout
-                        android:layout_width="0dp"
+                    <!-- titulo -->
+                    <TextView
+                        style="@style/TextAppearance.Kcal.SubHeading"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:orientation="vertical">
+                        android:text="Resumen diario"
+                        android:textSize="18sp" />
 
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="Objetivo"
-                            android:textColor="#777"
-                            android:textSize="12sp" />
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="2200 kcal"
-                            android:textStyle="bold" />
-
-                    </LinearLayout>
-
+                    <!-- progreso -->
                     <LinearLayout
-                        android:layout_width="0dp"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:orientation="vertical">
+                        android:layout_marginTop="12dp"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="Progreso del día"
+                            android:textColor="#777" />
 
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Restantes"
-                            android:textColor="#777"
-                            android:textSize="12sp" />
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="750 kcal"
+                            android:text="1450 / 2200 kcal"
                             android:textColor="@color/primary"
                             android:textStyle="bold" />
 
                     </LinearLayout>
 
-                </LinearLayout>
+                    <!-- barra progreso -->
+                    <ProgressBar
+                        android:id="@+id/progresoCalorias"
+                        style="?android:attr/progressBarStyleHorizontal"
+                        android:layout_width="match_parent"
+                        android:layout_height="10dp"
+                        android:layout_marginTop="8dp"
+                        android:max="100"
+                        android:progress="65"
+                        android:progressTint="@color/primary" />
 
-            </LinearLayout>
+                    <!-- stats -->
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="15dp"
+                        android:orientation="horizontal">
+
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:orientation="vertical">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Objetivo"
+                                android:textColor="#777"
+                                android:textSize="12sp" />
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="2200 kcal"
+                                android:textStyle="bold" />
+
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:orientation="vertical">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Restantes"
+                                android:textColor="#777"
+                                android:textSize="12sp" />
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="750 kcal"
+                                android:textColor="@color/primary"
+                                android:textStyle="bold" />
+
+                        </LinearLayout>
+
+                    </LinearLayout>
+
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
 
 
             <!-- ACCESO RAPIDO -->
             <TextView
-                android:text="Acceso rapido"
-                android:textSize="18sp"
-                android:textStyle="bold"
-                android:layout_marginTop="25dp"
+                style="@style/TextAppearance.Kcal.SubHeading"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"/>
+                android:layout_height="wrap_content"
+                android:layout_marginTop="25dp"
+                android:text="Acceso rápido"
+                android:textSize="18sp" />
 
 
             <!-- BOTON PRINCIPAL -->
-            <Button
+            <com.google.android.material.button.MaterialButton
                 android:id="@+id/BtnRegisComida"
-                android:text="Registrar comida"
-                android:textColor="@android:color/white"
-                android:textStyle="bold"
-                android:backgroundTint="@color/primary"
-                android:layout_marginTop="12dp"
                 android:layout_width="match_parent"
-                android:layout_height="55dp"/>
+                android:layout_height="56dp"
+                android:layout_marginTop="12dp"
+                android:backgroundTint="@color/primary"
+                android:text="Registrar comida"
+                android:textAllCaps="false"
+                android:textColor="@android:color/white"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                app:cornerRadius="12dp" />
 
 
             <!-- GRID TARJETAS -->
             <GridLayout
-                android:columnCount="2"
-                android:layout_marginTop="15dp"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                android:layout_marginTop="15dp"
+                android:columnCount="2">
 
                 <!-- PERFIL -->
-                <LinearLayout
+                <com.google.android.material.card.MaterialCardView
                     android:id="@+id/BtnPerfil"
-                    android:orientation="vertical"
-                    android:padding="16dp"
-                    android:layout_margin="8dp"
-                    android:background="@android:color/white"
-                    android:elevation="2dp"
                     android:layout_width="0dp"
+                    android:layout_height="wrap_content"
                     android:layout_columnWeight="1"
-                    android:layout_height="wrap_content">
+                    android:layout_margin="8dp"
+                    app:cardBackgroundColor="@android:color/white"
+                    app:cardCornerRadius="12dp"
+                    app:cardElevation="2dp">
 
                     <TextView
-                        android:text="Perfil"
-                        android:textStyle="bold"
+                        style="@style/TextAppearance.Kcal.SubHeading"
                         android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"/>
-
-                </LinearLayout>
+                        android:layout_height="wrap_content"
+                        android:padding="16dp"
+                        android:text="Perfil"
+                        android:textSize="14sp" />
+                </com.google.android.material.card.MaterialCardView>
 
                 <!-- HISTORIAL -->
-                <LinearLayout
+                <com.google.android.material.card.MaterialCardView
                     android:id="@+id/BtnHistorial"
-                    android:orientation="vertical"
-                    android:padding="16dp"
-                    android:layout_margin="8dp"
-                    android:background="@android:color/white"
-                    android:elevation="2dp"
                     android:layout_width="0dp"
+                    android:layout_height="wrap_content"
                     android:layout_columnWeight="1"
-                    android:layout_height="wrap_content">
+                    android:layout_margin="8dp"
+                    app:cardBackgroundColor="@android:color/white"
+                    app:cardCornerRadius="12dp"
+                    app:cardElevation="2dp">
 
                     <TextView
-                        android:text="Historial"
-                        android:textStyle="bold"
+                        style="@style/TextAppearance.Kcal.SubHeading"
                         android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"/>
-
-                </LinearLayout>
+                        android:layout_height="wrap_content"
+                        android:padding="16dp"
+                        android:text="Historial"
+                        android:textSize="14sp" />
+                </com.google.android.material.card.MaterialCardView>
 
                 <!-- ESTADISTICAS -->
-                <LinearLayout
+                <com.google.android.material.card.MaterialCardView
                     android:id="@+id/BtnEstadisticas"
-                    android:orientation="vertical"
-                    android:padding="16dp"
-                    android:layout_margin="8dp"
-                    android:background="@android:color/white"
-                    android:elevation="2dp"
                     android:layout_width="0dp"
+                    android:layout_height="wrap_content"
                     android:layout_columnWeight="1"
-                    android:layout_height="wrap_content">
+                    android:layout_margin="8dp"
+                    app:cardBackgroundColor="@android:color/white"
+                    app:cardCornerRadius="12dp"
+                    app:cardElevation="2dp">
 
                     <TextView
-                        android:text="Estadisticas"
-                        android:textStyle="bold"
+                        style="@style/TextAppearance.Kcal.SubHeading"
                         android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"/>
-
-                </LinearLayout>
+                        android:layout_height="wrap_content"
+                        android:padding="16dp"
+                        android:text="Estadísticas"
+                        android:textSize="14sp" />
+                </com.google.android.material.card.MaterialCardView>
 
                 <!-- SUGERENCIAS -->
-                <LinearLayout
+                <com.google.android.material.card.MaterialCardView
                     android:id="@+id/BtnRecomendaciones"
-                    android:orientation="vertical"
-                    android:padding="16dp"
-                    android:layout_margin="8dp"
-                    android:background="@android:color/white"
-                    android:elevation="2dp"
                     android:layout_width="0dp"
+                    android:layout_height="wrap_content"
                     android:layout_columnWeight="1"
-                    android:layout_height="wrap_content">
+                    android:layout_margin="8dp"
+                    app:cardBackgroundColor="@android:color/white"
+                    app:cardCornerRadius="12dp"
+                    app:cardElevation="2dp">
 
                     <TextView
-                        android:text="Sugerencias"
-                        android:textStyle="bold"
+                        style="@style/TextAppearance.Kcal.SubHeading"
                         android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"/>
-
-                </LinearLayout>
+                        android:layout_height="wrap_content"
+                        android:padding="16dp"
+                        android:text="Sugerencias"
+                        android:textSize="14sp" />
+                </com.google.android.material.card.MaterialCardView>
 
             </GridLayout>
 
@@ -267,8 +274,9 @@
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:background="@android:color/white"
-        app:itemIconTint="@color/primary"
-        app:itemTextColor="@color/primary"
-        app:menu="@menu/menu_inferior"/>
+        app:itemIconTint="@color/nav_item_color"
+        app:itemTextColor="@color/nav_item_color"
+        app:labelVisibilityMode="labeled"
+        app:menu="@menu/menu_inferior" />
 
 </RelativeLayout>

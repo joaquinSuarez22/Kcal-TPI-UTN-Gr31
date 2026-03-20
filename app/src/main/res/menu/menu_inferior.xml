@@ -14,7 +14,7 @@
     <item
         android:id="@+id/menu_estadisticas"
         android:icon="@android:drawable/ic_menu_sort_by_size"
-        android:title="Estadisticas"/>
+        android:title="Estadísticas"/>
 
     <item
         android:id="@+id/menu_ajustes"

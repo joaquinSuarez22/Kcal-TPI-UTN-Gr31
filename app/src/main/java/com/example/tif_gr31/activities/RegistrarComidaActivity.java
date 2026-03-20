@@ -3,39 +3,71 @@ package com.example.tif_gr31.activities;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.Button;
-
-import androidx.activity.EdgeToEdge;
+import android.widget.EditText;
+import android.widget.LinearLayout;
+import android.widget.Spinner;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.graphics.Insets;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowInsetsCompat;
-
 import com.example.tif_gr31.R;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.android.material.button.MaterialButton;
 
 public class RegistrarComidaActivity extends AppCompatActivity {
+
+    private LinearLayout btnBack;
+
+    // Inputs del formulario
+    private Spinner spinnerTipoComida;
+    private EditText etDescripcion, etCantidad, etCalorias, etFechaHora;
+
+    // Botones de acción
+    private MaterialButton btnGuardarComida, btnCancelar;
+
+    // Menú de navegación inferior
+    private BottomNavigationView bottomNav;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        EdgeToEdge.enable(this);
         setContentView(R.layout.activity_registrar_comida);
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
-            Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
-            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
-            return insets;
-        });
 
-        Button BtnVolver=findViewById(R.id.BtnVolverReg);
+        // Instanciar la cabecera (Botón Volver tipo estilo iOS)
+        btnBack = findViewById(R.id.btnBack);
 
-        BtnVolver.setOnClickListener(new View.OnClickListener() {
+        // Instanciar campos
+        spinnerTipoComida = findViewById(R.id.spinnerTipoComida);
+        etDescripcion = findViewById(R.id.etDescripcion);
+        etCantidad = findViewById(R.id.etCantidad);
+        etCalorias = findViewById(R.id.etCalorias);
+        etFechaHora = findViewById(R.id.etFechaHora);
+
+        // Instanciar Botones
+        btnGuardarComida = findViewById(R.id.btnGuardarComida);
+        btnCancelar = findViewById(R.id.btnCancelar);
+
+        // Menú
+        bottomNav = findViewById(R.id.bottomNav);
+
+        btnBack.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(RegistrarComidaActivity.this, InicioActivity.class);
-                startActivity(intent);
-
                 finish();
             }
         });
+
+        btnGuardarComida.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Lógica para capturar y guardar la comida usando los EditText...
+            }
+        });
+
+        btnCancelar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Descartar/Volver atrás
+                finish();
+            }
+        });
+
     }
 }

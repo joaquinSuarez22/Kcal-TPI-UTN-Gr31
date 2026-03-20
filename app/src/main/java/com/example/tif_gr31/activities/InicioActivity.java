@@ -2,8 +2,8 @@ package com.example.tif_gr31.activities;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.Button;
-import android.widget.LinearLayout;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -12,8 +12,7 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
 import com.example.tif_gr31.R;
-
-/// ----------------------------------------------------------------------------///
+import com.google.android.material.card.MaterialCardView;
 
 public class InicioActivity extends AppCompatActivity {
 
@@ -21,10 +20,9 @@ public class InicioActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        EdgeToEdge.enable(this); // permite que la app use toda la pantalla
-        setContentView(R.layout.activity_inicio); // carga el layout XML
+        EdgeToEdge.enable(this);
+        setContentView(R.layout.activity_inicio);
 
-        // Ajusta padding para barras del sistema
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
@@ -33,10 +31,10 @@ public class InicioActivity extends AppCompatActivity {
 
         /// Referencias a los botones del layout
         Button BtnRegistrarComida = findViewById(R.id.BtnRegisComida);
-        LinearLayout BtnEstadisticas = findViewById(R.id.BtnEstadisticas);
-        LinearLayout BtnRecomendaciones = findViewById(R.id.BtnRecomendaciones);
-        LinearLayout BtnHistorial = findViewById(R.id.BtnHistorial);
-        LinearLayout BtnPerfil = findViewById(R.id.BtnPerfil);
+        MaterialCardView BtnEstadisticas = findViewById(R.id.BtnEstadisticas);
+        MaterialCardView BtnRecomendaciones = findViewById(R.id.BtnRecomendaciones);
+        MaterialCardView BtnHistorial = findViewById(R.id.BtnHistorial);
+        MaterialCardView BtnPerfil = findViewById(R.id.BtnPerfil);
 
         /// Navegacion a pantalla Registrar comida
         BtnRegistrarComida.setOnClickListener(v -> {
