@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "443639696786",
+    "project_id": "kcal-ed3ed",
+    "storage_bucket": "kcal-ed3ed.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:443639696786:android:53da1de5a9e72b6698854b",
+        "android_client_info": {
+          "package_name": "com.example.tif_gr31"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAPxf55rhKTRDyWs4F8jX0uX1DkJWUL-Dg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
