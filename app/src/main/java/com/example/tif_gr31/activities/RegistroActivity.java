@@ -34,7 +34,8 @@ public class RegistroActivity extends AppCompatActivity {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
-        /// botones
+
+        /// guardamos botones
         Button BtnConfirmar=findViewById(R.id.BtnRegistrar);
         Button BtnRegresar=findViewById(R.id.btnYaCuenta);
         EditText txtEmail=findViewById(R.id.emailRegister);
@@ -42,7 +43,7 @@ public class RegistroActivity extends AppCompatActivity {
         EditText txtRepPass=findViewById(R.id.repeatPassword);
 
 
-        /// evento para ir al menu
+
         BtnConfirmar.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v) {
@@ -54,7 +55,7 @@ public class RegistroActivity extends AppCompatActivity {
                 usuario.put("email", email);
                 usuario.put("password", pass);
 
-                // Guardar en Firestore
+                /// aca se guarda een firestore
                 db.collection("usuarios")
                         .add(usuario)
                         .addOnSuccessListener(documentReference -> {
