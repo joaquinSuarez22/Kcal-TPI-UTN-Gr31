@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:gravity="center_vertical"
+    android:background="#FFFFFF"
+    android:paddingHorizontal="14dp"
+    android:paddingVertical="14dp"
+    android:clickable="true"
+    android:focusable="true"
+    android:foreground="?attr/selectableItemBackground">
+
+    <!-- Ícono alimento -->
+    <ImageView
+        android:layout_width="36dp"
+        android:layout_height="36dp"
+        android:src="@android:drawable/ic_menu_add"
+        android:backgroundTint="#DEF4C6"
+        android:padding="6dp"
+        app:tint="#1C7C54" />
+
+    <!-- Nombre + kcal -->
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:orientation="vertical"
+        android:layout_marginStart="12dp">
+
+        <TextView
+            android:id="@+id/tvNombreResultado"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Nombre alimento"
+            android:textColor="#131F1A"
+            android:textSize="14sp"
+            android:textStyle="bold"
+            android:maxLines="1"
+            android:ellipsize="end" />
+
+        <TextView
+            android:id="@+id/tvKcalResultado"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="— kcal / 100g"
+            android:textColor="#1C7C54"
+            android:textSize="12sp"
+            android:layout_marginTop="2dp" />
+    </LinearLayout>
+
+    <!-- Flecha derecha -->
+    <ImageView
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        android:src="@android:drawable/ic_media_next"
+        app:tint="#CBD5E1" />
+
+</LinearLayout>
