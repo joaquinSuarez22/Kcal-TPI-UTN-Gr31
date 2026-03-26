@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
@@ -40,6 +41,7 @@ public class LoginActivity extends AppCompatActivity {
         EditText txtPassword = findViewById(R.id.password);
         Button BtnLogin = findViewById(R.id.loginBtn);
         Button BtnRegistrar = findViewById(R.id.BtnRegistrar);
+        TextView forgotPassword = findViewById(R.id.forgotPassword);
 
         // Evento para Iniciar Sesión
         BtnLogin.setOnClickListener(new View.OnClickListener() {
@@ -75,6 +77,15 @@ public class LoginActivity extends AppCompatActivity {
                 Intent intent = new Intent(LoginActivity.this, RegistroActivity.class);
                 startActivity(intent);
 
+            }
+        });
+
+        // Evento para recuperar contraseña
+        forgotPassword.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(LoginActivity.this, RecuperarActivityActivity.class);
+                startActivity(intent);
             }
         });
     }

@@ -81,13 +81,16 @@
 
         <!-- Olvidé contraseña -->
         <TextView
+            android:id="@+id/forgotPassword"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="end"
             android:layout_marginBottom="32dp"
             android:text="¿Olvidaste tu contraseña?"
             android:textColor="@color/primary"
-            android:textStyle="bold" />
+            android:textStyle="bold"
+            android:clickable="true"
+            android:focusable="true"/>
 
         <!-- Botón login -->
         <com.google.android.material.button.MaterialButton

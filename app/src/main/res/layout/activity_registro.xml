@@ -13,23 +13,13 @@
         android:padding="24dp">
 
         <!-- Logo/Header Space -->
-        <FrameLayout
-            android:layout_width="64dp"
-            android:layout_height="64dp"
+        <ImageView
+            android:layout_width="100dp"
+            android:layout_height="100dp"
             android:layout_gravity="center"
-            android:layout_marginTop="20dp"
-            android:background="@drawable/circulo_fondo">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:text="K"
-                android:textColor="@color/primary"
-                android:textSize="32sp"
-                android:fontFamily="@font/raleway"
-                android:textStyle="bold" />
-        </FrameLayout>
+            android:layout_marginTop="40dp"
+            android:src="@mipmap/ic_launcher"
+            android:contentDescription="App Logo" />
 
         <!-- Título -->
         <TextView

@@ -294,8 +294,23 @@
                     android:textColor="#0f172a"
                     android:textSize="16sp"
                     android:textStyle="bold"
-                    android:layout_marginBottom="16dp"
+                    android:layout_marginBottom="12dp"
                     app:cornerRadius="12dp" />
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btnIrCerrarSesion"
+                    android:layout_width="match_parent"
+                    android:layout_height="56dp"
+                    android:backgroundTint="#fef2f2"
+                    android:text="Cerrar Sesión"
+                    android:textAllCaps="false"
+                    android:textColor="#ef4444"
+                    android:textSize="16sp"
+                    android:textStyle="bold"
+                    android:layout_marginBottom="16dp"
+                    app:cornerRadius="12dp"
+                    app:strokeColor="#fee2e2"
+                    app:strokeWidth="1dp" />
 
             </LinearLayout>
         </ScrollView>

@@ -157,10 +157,11 @@
                         <com.google.android.material.button.MaterialButton
                             android:id="@+id/btnAgregarIngrediente"
                             android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
+                            android:layout_height="52dp"
                             android:text="Añadir"
                             android:layout_marginStart="8dp"
-                            android:backgroundTint="#1C7C54" />
+                            android:backgroundTint="#1C7C54"
+                            app:cornerRadius="12dp" />
                     </LinearLayout>
 
                     <!-- DASHBOARD DE MACROS (DINÁMICO) -->
@@ -250,7 +251,8 @@
                         android:layout_marginTop="20dp"
                         android:text="GUARDAR COMIDA"
                         android:backgroundTint="#1C7C54"
-                        android:textStyle="bold" />
+                        android:textStyle="bold"
+                        app:cornerRadius="12dp" />
                 </LinearLayout>
 
             </LinearLayout>
