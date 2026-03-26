@@ -1,264 +1,263 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/registrarComidaMain"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#DEF4C6"
+    android:background="@color/background_light"
     tools:context=".activities.RegistrarComidaActivity">
 
-    <!-- HEADER -->
     <LinearLayout
-        android:id="@+id/headerLayout"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:gravity="center_vertical"
-        android:padding="16dp"
-        app:layout_constraintTop_toTopOf="parent">
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <!-- HEADER -->
         <LinearLayout
-            android:id="@+id/btnBack"
-            android:layout_width="wrap_content"
+            android:id="@+id/headerLayout"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
             android:gravity="center_vertical"
-            android:clickable="true"
-            android:focusable="true">
-            <ImageView
-                android:layout_width="24dp"
-                android:layout_height="24dp"
-                android:src="@android:drawable/ic_media_previous"
-                app:tint="#1C7C54" />
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Atrás"
-                android:textColor="#1C7C54"
-                android:textSize="16sp"
-                android:textStyle="bold"
-                android:layout_marginStart="4dp" />
-        </LinearLayout>
-        <TextView
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="Registrar Comida"
-            android:textColor="#131F1A"
-            android:textSize="18sp"
-            android:textStyle="bold"
-            android:gravity="center"
-            android:layout_marginEnd="72dp" />
-    </LinearLayout>
-
-    <androidx.core.widget.NestedScrollView
-        android:id="@+id/scrollView"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:fillViewport="true"
-        app:layout_constraintTop_toBottomOf="@+id/headerLayout"
-        app:layout_constraintBottom_toTopOf="@+id/bottomNav"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent">
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
             android:padding="16dp">
-
-            <!-- BUSCADOR -->
-            <TextView
+            <LinearLayout
+                android:id="@+id/btnBack"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Añadir Ingrediente"
-                android:textColor="#1B512D"
-                android:textSize="18sp"
-                android:textStyle="bold"
-                android:layout_marginBottom="8dp" />
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="52dp"
                 android:orientation="horizontal"
-                android:background="#FFFFFF"
                 android:gravity="center_vertical"
-                android:paddingStart="14dp"
-                android:paddingEnd="8dp">
+                android:clickable="true"
+                android:focusable="true">
                 <ImageView
-                    android:layout_width="20dp"
-                    android:layout_height="20dp"
-                    android:src="@android:drawable/ic_menu_search"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:src="@android:drawable/ic_media_previous"
                     app:tint="#1C7C54" />
-                <EditText
-                    android:id="@+id/etBuscarAlimento"
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:background="@null"
-                    android:hint="Ej: Chicken, Rice..."
-                    android:paddingStart="8dp"
-                    android:textSize="15sp"
-                    android:inputType="text" />
-                <ImageView
-                    android:id="@+id/btnLimpiarBusqueda"
-                    android:layout_width="36dp"
-                    android:layout_height="36dp"
-                    android:src="@android:drawable/ic_menu_close_clear_cancel"
-                    android:visibility="gone" />
-            </LinearLayout>
-
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/rvResultadosBusqueda"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:maxHeight="200dp"
-                android:background="#F8FAFC"
-                android:visibility="gone" />
-
-            <!-- TARJETA DE ALIMENTO SELECCIONADO Y CALCULADORA -->
-            <LinearLayout
-                android:id="@+id/cardAlimentoSeleccionado"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:background="#FFFFFF"
-                android:padding="16dp"
-                android:layout_marginTop="12dp"
-                android:visibility="gone"
-                android:elevation="2dp">
-
                 <TextView
-                    android:id="@+id/tvNombreAlimentoSeleccionado"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Nombre"
+                    android:text="Atrás"
+                    android:textColor="#1C7C54"
                     android:textSize="16sp"
                     android:textStyle="bold"
-                    android:textColor="#1B512D" />
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:gravity="center_vertical"
-                    android:layout_marginTop="12dp">
-                    <EditText
-                        android:id="@+id/etGramos"
-                        android:layout_width="0dp"
-                        android:layout_weight="1"
-                        android:layout_height="48dp"
-                        android:hint="Cantidad (gramos)"
-                        android:inputType="numberDecimal"
-                        android:background="@android:drawable/editbox_background_normal"
-                        android:padding="8dp" />
-                    <com.google.android.material.button.MaterialButton
-                        android:id="@+id/btnAgregarIngrediente"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Añadir"
-                        android:layout_marginStart="8dp"
-                        android:backgroundTint="#1C7C54" />
-                </LinearLayout>
-
-                <!-- DASHBOARD DE MACROS (DINÁMICO) -->
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:layout_marginTop="16dp">
-                    <!-- Kcal -->
-                    <LinearLayout android:layout_width="0dp" android:layout_weight="1" android:layout_height="wrap_content" android:orientation="vertical" android:gravity="center" android:background="#1C7C54" android:padding="8dp" android:layout_marginEnd="4dp">
-                        <TextView android:id="@+id/tvCaloriasCalculadas" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="0" android:textColor="#FFFFFF" android:textStyle="bold" />
-                        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="kcal" android:textColor="#FFFFFF" android:textSize="10sp" />
-                    </LinearLayout>
-                    <!-- Prot -->
-                    <LinearLayout android:layout_width="0dp" android:layout_weight="1" android:layout_height="wrap_content" android:orientation="vertical" android:gravity="center" android:background="#F1F5F9" android:padding="8dp" android:layout_marginEnd="4dp">
-                        <TextView android:id="@+id/tvProteinasCalculadas" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="0" android:textColor="#1B512D" android:textStyle="bold" />
-                        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="prot" android:textColor="#64748B" android:textSize="10sp" />
-                    </LinearLayout>
-                    <!-- Carb -->
-                    <LinearLayout android:layout_width="0dp" android:layout_weight="1" android:layout_height="wrap_content" android:orientation="vertical" android:gravity="center" android:background="#F1F5F9" android:padding="8dp" android:layout_marginEnd="4dp">
-                        <TextView android:id="@+id/tvCarbosCalculados" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="0" android:textColor="#1B512D" android:textStyle="bold" />
-                        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="carb" android:textColor="#64748B" android:textSize="10sp" />
-                    </LinearLayout>
-                    <!-- Grasas -->
-                    <LinearLayout android:layout_width="0dp" android:layout_weight="1" android:layout_height="wrap_content" android:orientation="vertical" android:gravity="center" android:background="#F1F5F9" android:padding="8dp">
-                        <TextView android:id="@+id/tvGrasasCalculadas" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="0" android:textColor="#1B512D" android:textStyle="bold" />
-                        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="grasas" android:textColor="#64748B" android:textSize="10sp" />
-                    </LinearLayout>
-                </LinearLayout>
+                    android:layout_marginStart="4dp" />
             </LinearLayout>
-
-            <View android:layout_width="match_parent" android:layout_height="1dp" android:background="#CBD5E1" android:layout_marginVertical="20dp" />
-
-            <!-- LISTA DE INGREDIENTES AGREGADOS -->
             <TextView
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:text="Resumen de la comida"
-                android:textColor="#1B512D"
-                android:textSize="16sp"
+                android:layout_weight="1"
+                android:text="Registrar Comida"
+                android:textColor="#131F1A"
+                android:textSize="18sp"
                 android:textStyle="bold"
-                android:layout_marginBottom="8dp" />
+                android:gravity="center"
+                android:layout_marginEnd="72dp" />
+        </LinearLayout>
 
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/rvIngredientesAgregados"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:minHeight="100dp" />
+        <androidx.core.widget.NestedScrollView
+            android:id="@+id/scrollView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:fillViewport="true"
+            android:clipToPadding="false"
+            android:paddingBottom="100dp">
 
-            <!-- TOTALES Y GUARDADO -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-                android:background="#FFFFFF"
-                android:padding="16dp"
-                android:layout_marginTop="16dp"
-                android:elevation="4dp">
+                android:padding="16dp">
+
+                <!-- BUSCADOR -->
                 <TextView
-                    android:id="@+id/tvTotalCalorias"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Total: 0 kcal"
-                    android:textSize="20sp"
+                    android:text="Añadir Ingrediente"
+                    android:textColor="#1B512D"
+                    android:textSize="18sp"
                     android:textStyle="bold"
-                    android:textColor="#1C7C54" />
-                <TextView
-                    android:id="@+id/tvTotalMacros"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="P: 0g | C: 0g | G: 0g"
-                    android:textSize="13sp"
-                    android:textColor="#64748B" />
+                    android:layout_marginBottom="8dp" />
 
-                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Momento del día" android:layout_marginTop="12dp" android:textSize="12sp" android:textStyle="bold" />
-                <Spinner
-                    android:id="@+id/spinnerTipoComida"
-                    android:layout_width="match_parent"
-                    android:layout_height="48dp"
-                    android:layout_marginTop="4dp" />
-
-                <com.google.android.material.button.MaterialButton
-                    android:id="@+id/btnGuardarComida"
+                <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="52dp"
-                    android:layout_marginTop="20dp"
-                    android:text="GUARDAR COMIDA"
-                    android:backgroundTint="#1C7C54"
-                    android:textStyle="bold" />
+                    android:orientation="horizontal"
+                    android:background="#FFFFFF"
+                    android:gravity="center_vertical"
+                    android:paddingStart="14dp"
+                    android:paddingEnd="8dp">
+                    <ImageView
+                        android:layout_width="20dp"
+                        android:layout_height="20dp"
+                        android:src="@android:drawable/ic_menu_search"
+                        app:tint="#1C7C54" />
+                    <EditText
+                        android:id="@+id/etBuscarAlimento"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:background="@null"
+                        android:hint="Ej: Chicken, Rice..."
+                        android:paddingStart="8dp"
+                        android:textSize="15sp"
+                        android:inputType="text" />
+                    <ImageView
+                        android:id="@+id/btnLimpiarBusqueda"
+                        android:layout_width="36dp"
+                        android:layout_height="36dp"
+                        android:src="@android:drawable/ic_menu_close_clear_cancel"
+                        android:visibility="gone" />
+                </LinearLayout>
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/rvResultadosBusqueda"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:maxHeight="200dp"
+                    android:background="#F8FAFC"
+                    android:visibility="gone" />
+
+                <!-- TARJETA DE ALIMENTO SELECCIONADO Y CALCULADORA -->
+                <LinearLayout
+                    android:id="@+id/cardAlimentoSeleccionado"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:background="#FFFFFF"
+                    android:padding="16dp"
+                    android:layout_marginTop="12dp"
+                    android:visibility="gone"
+                    android:elevation="2dp">
+
+                    <TextView
+                        android:id="@+id/tvNombreAlimentoSeleccionado"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Nombre"
+                        android:textSize="16sp"
+                        android:textStyle="bold"
+                        android:textColor="#1B512D" />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:gravity="center_vertical"
+                        android:layout_marginTop="12dp">
+                        <EditText
+                            android:id="@+id/etGramos"
+                            android:layout_width="0dp"
+                            android:layout_weight="1"
+                            android:layout_height="48dp"
+                            android:hint="Cantidad (gramos)"
+                            android:inputType="numberDecimal"
+                            android:background="@android:drawable/editbox_background_normal"
+                            android:padding="8dp" />
+                        <com.google.android.material.button.MaterialButton
+                            android:id="@+id/btnAgregarIngrediente"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Añadir"
+                            android:layout_marginStart="8dp"
+                            android:backgroundTint="#1C7C54" />
+                    </LinearLayout>
+
+                    <!-- DASHBOARD DE MACROS (DINÁMICO) -->
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:layout_marginTop="16dp">
+                        <!-- Kcal -->
+                        <LinearLayout android:layout_width="0dp" android:layout_weight="1" android:layout_height="wrap_content" android:orientation="vertical" android:gravity="center" android:background="#1C7C54" android:padding="8dp" android:layout_marginEnd="4dp">
+                            <TextView android:id="@+id/tvCaloriasCalculadas" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="0" android:textColor="#FFFFFF" android:textStyle="bold" />
+                            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="kcal" android:textColor="#FFFFFF" android:textSize="10sp" />
+                        </LinearLayout>
+                        <!-- Prot -->
+                        <LinearLayout android:layout_width="0dp" android:layout_weight="1" android:layout_height="wrap_content" android:orientation="vertical" android:gravity="center" android:background="#F1F5F9" android:padding="8dp" android:layout_marginEnd="4dp">
+                            <TextView android:id="@+id/tvProteinasCalculadas" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="0" android:textColor="#1B512D" android:textStyle="bold" />
+                            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="prot" android:textColor="#64748B" android:textSize="10sp" />
+                        </LinearLayout>
+                        <!-- Carb -->
+                        <LinearLayout android:layout_width="0dp" android:layout_weight="1" android:layout_height="wrap_content" android:orientation="vertical" android:gravity="center" android:background="#F1F5F9" android:padding="8dp" android:layout_marginEnd="4dp">
+                            <TextView android:id="@+id/tvCarbosCalculados" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="0" android:textColor="#1B512D" android:textStyle="bold" />
+                            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="carb" android:textColor="#64748B" android:textSize="10sp" />
+                        </LinearLayout>
+                        <!-- Grasas -->
+                        <LinearLayout android:layout_width="0dp" android:layout_weight="1" android:layout_height="wrap_content" android:orientation="vertical" android:gravity="center" android:background="#F1F5F9" android:padding="8dp">
+                            <TextView android:id="@+id/tvGrasasCalculadas" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="0" android:textColor="#1B512D" android:textStyle="bold" />
+                            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="grasas" android:textColor="#64748B" android:textSize="10sp" />
+                        </LinearLayout>
+                    </LinearLayout>
+                </LinearLayout>
+
+                <View android:layout_width="match_parent" android:layout_height="1dp" android:background="#CBD5E1" android:layout_marginVertical="20dp" />
+
+                <!-- LISTA DE INGREDIENTES AGREGADOS -->
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Resumen de la comida"
+                    android:textColor="#1B512D"
+                    android:textSize="16sp"
+                    android:textStyle="bold"
+                    android:layout_marginBottom="8dp" />
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/rvIngredientesAgregados"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:minHeight="100dp" />
+
+                <!-- TOTALES Y GUARDADO -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:background="#FFFFFF"
+                    android:padding="16dp"
+                    android:layout_marginTop="16dp"
+                    android:elevation="4dp"
+                    android:layout_marginBottom="24dp">
+                    <TextView
+                        android:id="@+id/tvTotalCalorias"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Total: 0 kcal"
+                        android:textSize="20sp"
+                        android:textStyle="bold"
+                        android:textColor="#1C7C54" />
+                    <TextView
+                        android:id="@+id/tvTotalMacros"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="P: 0g | C: 0g | G: 0g"
+                        android:textSize="13sp"
+                        android:textColor="#64748B" />
+
+                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Momento del día" android:layout_marginTop="12dp" android:textSize="12sp" android:textStyle="bold" />
+                    <Spinner
+                        android:id="@+id/spinnerTipoComida"
+                        android:layout_width="match_parent"
+                        android:layout_height="48dp"
+                        android:layout_marginTop="4dp" />
+
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/btnGuardarComida"
+                        android:layout_width="match_parent"
+                        android:layout_height="52dp"
+                        android:layout_marginTop="20dp"
+                        android:text="GUARDAR COMIDA"
+                        android:backgroundTint="#1C7C54"
+                        android:textStyle="bold" />
+                </LinearLayout>
+
             </LinearLayout>
+        </androidx.core.widget.NestedScrollView>
+    </LinearLayout>
 
-        </LinearLayout>
-    </androidx.core.widget.NestedScrollView>
+    <!-- Barra de navegación flotante (píldora) -->
+    <include layout="@layout/floating_bottom_nav" />
 
-    <com.google.android.material.bottomnavigation.BottomNavigationView
-        android:id="@+id/bottomNav"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="#FFFFFF"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:menu="@menu/menu_inferior" />
-
-</androidx.constraintlayout.widget.ConstraintLayout>
+</FrameLayout>

@@ -13,8 +13,7 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
 import com.example.tif_gr31.R;
-import com.example.tif_gr31.utils.NavigationHelper;
-import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.example.tif_gr31.utils.FloatingNavigationHelper;
 import com.google.android.material.progressindicator.CircularProgressIndicator;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -23,6 +22,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.Calendar;
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.Map;
 
 public class InicioActivity extends AppCompatActivity {
@@ -65,19 +65,17 @@ public class InicioActivity extends AppCompatActivity {
         vincularVistas();
         setupMealItems();
 
-        BottomNavigationView bottomNav = findViewById(R.id.bottomNav);
-        NavigationHelper.setupBottomNavigation(this, bottomNav, R.id.menu_inicio);
+        // Configuración de Navegación Flotante
+        FloatingNavigationHelper.setupFloatingNavigation(this, R.id.nav_inicio);
 
         cargarDatosResumen();
     }
 
     private void vincularVistas() {
-        // Calorías
         txtCaloriasRestantesCentro = findViewById(R.id.txtCaloriasRestantesCentro);
         txtObjetivoTotalCalorias = findViewById(R.id.txtObjetivoTotalCalorias);
         progresoCaloriasCircular = findViewById(R.id.progresoCaloriasCircular);
 
-        // Macros
         txtCarbosGramos = findViewById(R.id.txtCarbosGramos);
         txtProteinasGramos = findViewById(R.id.txtProteinasGramos);
         txtGrasasGramos = findViewById(R.id.txtGrasasGramos);
@@ -85,7 +83,6 @@ public class InicioActivity extends AppCompatActivity {
         progresoProteinas = findViewById(R.id.progresoProteinas);
         progresoGrasas = findViewById(R.id.progresoGrasas);
 
-        // Comidas
         mealViews.put("Desayuno", findViewById(R.id.itemDesayuno));
         mealViews.put("Almuerzo", findViewById(R.id.itemAlmuerzo));
         mealViews.put("Merienda", findViewById(R.id.itemMerienda));
@@ -130,7 +127,8 @@ public class InicioActivity extends AppCompatActivity {
 
     private void obtenerConsumoDelDia(String userId) {
         Calendar cal = Calendar.getInstance();
-        String hoy = cal.get(Calendar.YEAR) + "-" + String.format("%02d", (cal.get(Calendar.MONTH) + 1)) + "-" + String.format("%02d", cal.get(Calendar.DAY_OF_MONTH));
+        String hoy = String.format(Locale.US, "%d-%02d-%02d", 
+                cal.get(Calendar.YEAR), cal.get(Calendar.MONTH) + 1, cal.get(Calendar.DAY_OF_MONTH));
 
         db.collection("usuarios").document(userId).collection("comidas")
                 .whereEqualTo("fecha", hoy)
@@ -158,18 +156,15 @@ public class InicioActivity extends AppCompatActivity {
     }
 
     private void actualizarUI() {
-        // Calorías
         double restantes = Math.max(0, objetivoCaloricoTotal - calsConsumidas);
-        txtCaloriasRestantesCentro.setText(String.format("%.0f", restantes));
-        txtObjetivoTotalCalorias.setText(String.format("Objetivo: %.0f kcal", objetivoCaloricoTotal));
+        txtCaloriasRestantesCentro.setText(String.format(Locale.US, "%.0f", restantes));
+        txtObjetivoTotalCalorias.setText(String.format(Locale.US, "Objetivo: %.0f kcal", objetivoCaloricoTotal));
         
         if (objetivoCaloricoTotal > 0) {
             int progreso = (int) ((calsConsumidas / objetivoCaloricoTotal) * 100);
             progresoCaloriasCircular.setProgress(Math.min(progreso, 100));
         }
 
-        // Macronutrientes (Estimación de objetivos basada en porcentajes estándar si no hay perfil de macros)
-        // Carbos: 50%, Prots: 20%, Grasas: 30% del objetivo calórico
         double objCarbos = (objetivoCaloricoTotal * 0.5) / 4;
         double objProt = (objetivoCaloricoTotal * 0.2) / 4;
         double objGrasa = (objetivoCaloricoTotal * 0.3) / 9;
@@ -178,18 +173,17 @@ public class InicioActivity extends AppCompatActivity {
         actualizarMacroCircle(progresoProteinas, txtProteinasGramos, protConsumidas, objProt);
         actualizarMacroCircle(progresoGrasas, txtGrasasGramos, grasasConsumidas, objGrasa);
 
-        // Comidas
         for (String cat : categorias) {
             double objCat = cat.equals("Snacks") ? objetivoCaloricoTotal * 0.1 : objetivoCaloricoTotal * 0.225;
             View v = mealViews.get(cat);
             if (v != null) {
-                ((TextView)v.findViewById(R.id.txtComidaCalorias)).setText(String.format("%.0f / %.0f kcal", consumoPorCategoria.get(cat), objCat));
+                ((TextView)v.findViewById(R.id.txtComidaCalorias)).setText(String.format(Locale.US, "%.0f / %.0f kcal", consumoPorCategoria.get(cat), objCat));
             }
         }
     }
 
     private void actualizarMacroCircle(CircularProgressIndicator cp, TextView tv, double valor, double objetivo) {
-        tv.setText(String.format("%.0fg", valor));
+        tv.setText(String.format(Locale.US, "%.0fg", valor));
         if (objetivo > 0) {
             int prog = (int) ((valor / objetivo) * 100);
             cp.setProgress(Math.min(prog, 100));

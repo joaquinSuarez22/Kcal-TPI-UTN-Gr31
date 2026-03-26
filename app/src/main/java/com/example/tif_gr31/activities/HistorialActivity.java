@@ -8,14 +8,17 @@ import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import androidx.activity.EdgeToEdge;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.graphics.Insets;
+import androidx.core.view.ViewCompat;
+import androidx.core.view.WindowInsetsCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.tif_gr31.R;
-import com.example.tif_gr31.utils.NavigationHelper;
-import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.example.tif_gr31.utils.FloatingNavigationHelper;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -39,7 +42,15 @@ public class HistorialActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        
+        EdgeToEdge.enable(this);
         setContentView(R.layout.activity_historial);
+
+        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
+            Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
+            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
+            return insets;
+        });
 
         db = FirebaseFirestore.getInstance();
         mAuth = FirebaseAuth.getInstance();
@@ -53,10 +64,8 @@ public class HistorialActivity extends AppCompatActivity {
 
         findViewById(R.id.BtnVolverHistorial).setOnClickListener(v -> finish());
 
-        BottomNavigationView bottomNav = findViewById(R.id.bottomNav);
-        if (bottomNav != null) {
-            NavigationHelper.setupBottomNavigation(this, bottomNav, R.id.menu_historial);
-        }
+        // Configuración de Navegación Flotante
+        FloatingNavigationHelper.setupFloatingNavigation(this, R.id.nav_historial);
 
         cargarHistorial();
     }
@@ -113,7 +122,6 @@ public class HistorialActivity extends AppCompatActivity {
             holder.tvTipo.setText((String) comida.get("categoria"));
             holder.tvFecha.setText((String) comida.get("fecha"));
             
-            // Construir detalle de ingredientes
             List<Map<String, Object>> ingredientes = (List<Map<String, Object>>) comida.get("ingredientes");
             if (ingredientes != null && !ingredientes.isEmpty()) {
                 StringBuilder sb = new StringBuilder();
@@ -128,11 +136,13 @@ public class HistorialActivity extends AppCompatActivity {
 
             double cals = comida.get("calorias") != null ? ((Number) comida.get("calorias")).doubleValue() : 0;
             double p = comida.get("proteinas") != null ? ((Number) comida.get("proteinas")).doubleValue() : 0;
-            double c = comida.get("carbohidratos") != null ? ((Number) comida.get("carbohidratos")).doubleValue() : 0;
             double g = comida.get("grasas") != null ? ((Number) comida.get("grasas")).doubleValue() : 0;
 
             holder.tvCals.setText(String.format("%.0f kcal", cals));
-            holder.tvMacros.setText(String.format("P: %.1fg | C: %.1fg | G: %.1fg", p, c, g));
+            // Fixed typo from previous read if any, though it looked okay. 
+            // wait, it was: Map<String, Object> doesn't guarantee type, so casting is safer.
+            double carbos = comida.get("carbohidratos") != null ? ((Number) comida.get("carbohidratos")).doubleValue() : 0;
+            holder.tvMacros.setText(String.format("P: %.1fg | C: %.1fg | G: %.1fg", p, carbos, g));
         }
 
         @Override

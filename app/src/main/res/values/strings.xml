@@ -1,3 +1,7 @@
 <resources>
-    <string name="app_name">TIF_Gr31</string>
+    <string name="app_name">Kcal</string>
+    <string name="nav_inicio">Inicio</string>
+    <string name="nav_historial">Historial</string>
+    <string name="nav_estadisticas">Estadísticas</string>
+    <string name="nav_perfil">Perfil</string>
 </resources>

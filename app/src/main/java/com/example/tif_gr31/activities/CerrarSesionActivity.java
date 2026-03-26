@@ -2,12 +2,10 @@ package com.example.tif_gr31.activities;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.View;
 import android.widget.ImageView;
 import androidx.appcompat.app.AppCompatActivity;
 import com.example.tif_gr31.R;
-import com.example.tif_gr31.utils.NavigationHelper;
-import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.example.tif_gr31.utils.FloatingNavigationHelper;
 import com.google.android.material.button.MaterialButton;
 
 
@@ -16,7 +14,6 @@ public class CerrarSesionActivity extends AppCompatActivity {
     private ImageView btnBack;
     private MaterialButton btnConfirmarCerrarSesion;
     private MaterialButton btnCancelar;
-    private BottomNavigationView bottomNav;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -27,12 +24,9 @@ public class CerrarSesionActivity extends AppCompatActivity {
         btnBack = findViewById(R.id.btnBack);
         btnConfirmarCerrarSesion = findViewById(R.id.btnConfirmarCerrarSesion);
         btnCancelar = findViewById(R.id.btnCancelar);
-        bottomNav = findViewById(R.id.bottomNav);
 
-        // Configuración de Navegación Inferior
-        if (bottomNav != null) {
-            NavigationHelper.setupBottomNavigation(this, bottomNav, R.id.menu_perfil);
-        }
+        // Configuración de Navegación Flotante
+        FloatingNavigationHelper.setupFloatingNavigation(this, R.id.nav_perfil);
 
         // Set up click listeners
         btnBack.setOnClickListener(v -> finish());

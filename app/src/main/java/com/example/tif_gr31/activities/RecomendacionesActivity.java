@@ -1,21 +1,17 @@
 package com.example.tif_gr31.activities;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
 import androidx.appcompat.app.AppCompatActivity;
 import com.example.tif_gr31.R;
-import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.example.tif_gr31.utils.FloatingNavigationHelper;
 import com.google.android.material.button.MaterialButton;
 
 public class RecomendacionesActivity extends AppCompatActivity {
 
     private ImageView btnBack;
     private MaterialButton btnVolverInicio;
-
-    // Bottom Nav
-    private BottomNavigationView bottomNav;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,8 +24,8 @@ public class RecomendacionesActivity extends AppCompatActivity {
         // Buttons
         btnVolverInicio = findViewById(R.id.btnVolverInicio);
 
-        // Bottom Nav bar
-        bottomNav = findViewById(R.id.bottomNav);
+        // Configuración de Navegación Flotante
+        FloatingNavigationHelper.setupFloatingNavigation(this, R.id.nav_estadisticas);
 
         // OnClick Listeners
         btnBack.setOnClickListener(new View.OnClickListener() {
@@ -42,10 +38,8 @@ public class RecomendacionesActivity extends AppCompatActivity {
         btnVolverInicio.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // Lógica para regresar al Inicio principal
-                // finish();
+                finish();
             }
         });
-
     }
 }

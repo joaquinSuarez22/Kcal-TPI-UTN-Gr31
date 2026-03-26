@@ -1,6 +1,5 @@
 package com.example.tif_gr31.activities;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
@@ -17,8 +16,12 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.activity.EdgeToEdge;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.graphics.Insets;
+import androidx.core.view.ViewCompat;
+import androidx.core.view.WindowInsetsCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -26,7 +29,7 @@ import com.example.tif_gr31.R;
 import com.example.tif_gr31.api.ApiClient;
 import com.example.tif_gr31.api.FoodProduct;
 import com.example.tif_gr31.api.FoodSearchResponse;
-import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.example.tif_gr31.utils.FloatingNavigationHelper;
 import com.google.android.material.button.MaterialButton;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -75,7 +78,15 @@ public class RegistrarComidaActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        
+        EdgeToEdge.enable(this);
         setContentView(R.layout.activity_registrar_comida);
+
+        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.registrarComidaMain), (v, insets) -> {
+            Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
+            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
+            return insets;
+        });
 
         db = FirebaseFirestore.getInstance();
         auth = FirebaseAuth.getInstance();
@@ -88,6 +99,9 @@ public class RegistrarComidaActivity extends AppCompatActivity {
 
         // Manejar la categoría preseleccionada desde el Dashboard
         manejarCategoriaPreseleccionada();
+
+        // Configuración de Navegación Flotante
+        FloatingNavigationHelper.setupFloatingNavigation(this, -1);
 
         btnAgregarIngrediente.setOnClickListener(v -> agregarIngredienteALista());
         btnGuardarComida.setOnClickListener(v -> guardarComidaCompleta());
@@ -122,16 +136,6 @@ public class RegistrarComidaActivity extends AppCompatActivity {
         tvProteinasCalculadas = findViewById(R.id.tvProteinasCalculadas);
         tvCarbosCalculados = findViewById(R.id.tvCarbosCalculados);
         tvGrasasCalculadas = findViewById(R.id.tvGrasasCalculadas);
-
-        BottomNavigationView bottomNav = findViewById(R.id.bottomNav);
-        bottomNav.setOnItemSelectedListener(item -> {
-            int id = item.getItemId();
-            if (id == R.id.menu_inicio) {
-                startActivity(new Intent(this, InicioActivity.class));
-                return true;
-            }
-            return false;
-        });
     }
 
     private void configurarAdapters() {
@@ -273,18 +277,18 @@ public class RegistrarComidaActivity extends AppCompatActivity {
         totalProt += protFinal;
         totalCarb += carbFinal;
         totalGrasa += grasaFinal;
-        
-        actualizarVistasTotales();
+
+        actualizarResumenTotales();
         ingredientesAdapter.notifyDataSetChanged();
-        
+
+        // Limpiar para el siguiente ingrediente
+        alimentoActual = null;
         cardAlimentoSeleccionado.setVisibility(View.GONE);
         etBuscarAlimento.setText("");
         etGramos.setText("");
-        alimentoActual = null;
-        resetearDashboard();
     }
 
-    private void actualizarVistasTotales() {
+    private void actualizarResumenTotales() {
         tvTotalCalorias.setText(String.format(Locale.getDefault(), "Total: %.0f kcal", totalKcal));
         tvTotalMacros.setText(String.format(Locale.getDefault(), "P: %.1fg | C: %.1fg | G: %.1fg", totalProt, totalCarb, totalGrasa));
     }
@@ -295,71 +299,101 @@ public class RegistrarComidaActivity extends AppCompatActivity {
             return;
         }
 
-        String uid = auth.getCurrentUser() != null ? auth.getCurrentUser().getUid() : "anonimo";
-        String fecha = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(new Date());
+        String userId = auth.getUid();
+        if (userId == null) return;
 
-        Map<String, Object> comida = new HashMap<>();
-        comida.put("uid", uid);
-        comida.put("fecha", fecha);
-        comida.put("categoria", spinnerTipoComida.getSelectedItem().toString());
-        comida.put("ingredientes", listaIngredientes);
-        comida.put("calorias", totalKcal);
-        comida.put("proteinas", totalProt);
-        comida.put("carbohidratos", totalCarb);
-        comida.put("grasas", totalGrasa);
+        String tipoComida = spinnerTipoComida.getSelectedItem().toString();
+        String fechaHoy = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(new Date());
 
-        btnGuardarComida.setEnabled(false);
-        db.collection("usuarios").document(uid).collection("comidas")
-                .add(comida)
-                .addOnSuccessListener(doc -> {
-                    Toast.makeText(this, "¡Comida guardada!", Toast.LENGTH_SHORT).show();
+        Map<String, Object> comidaMap = new HashMap<>();
+        comidaMap.put("userId", userId);
+        comidaMap.put("tipo", tipoComida);
+        comidaMap.put("fecha", fechaHoy);
+        comidaMap.put("timestamp", new Date());
+        comidaMap.put("totalKcal", totalKcal);
+        comidaMap.put("totalProt", totalProt);
+        comidaMap.put("totalCarb", totalCarb);
+        comidaMap.put("totalGrasa", totalGrasa);
+        comidaMap.put("ingredientes", listaIngredientes);
+
+        db.collection("comidas").add(comidaMap)
+                .addOnSuccessListener(documentReference -> {
+                    Toast.makeText(this, "Comida guardada exitosamente", Toast.LENGTH_SHORT).show();
                     finish();
                 })
-                .addOnFailureListener(e -> {
-                    btnGuardarComida.setEnabled(true);
-                    Toast.makeText(this, "Error al guardar", Toast.LENGTH_SHORT).show();
-                });
+                .addOnFailureListener(e -> Toast.makeText(this, "Error al guardar", Toast.LENGTH_SHORT).show());
     }
 
-    // ADAPTADORES
-    private static class ResultadosAdapter extends RecyclerView.Adapter<ResultadosAdapter.VH> {
-        private final List<Map<String, Object>> lista;
-        private final OnClick listener;
-        interface OnClick { void call(Map<String, Object> m); }
-        ResultadosAdapter(List<Map<String, Object>> l, OnClick c) { this.lista = l; this.listener = c; }
-        @NonNull @Override public VH onCreateViewHolder(@NonNull ViewGroup p, int t) {
-            return new VH(LayoutInflater.from(p.getContext()).inflate(R.layout.item_resultado_alimento, p, false));
+    // --- ADAPTERS INTERNOS ---
+
+    private class ResultadosAdapter extends RecyclerView.Adapter<ResultadosAdapter.ViewHolder> {
+        private final List<Map<String, Object>> items;
+        private final OnItemClickListener listener;
+
+        public ResultadosAdapter(List<Map<String, Object>> items, OnItemClickListener listener) {
+            this.items = items;
+            this.listener = listener;
         }
-        @Override public void onBindViewHolder(@NonNull VH h, int p) {
-            Map<String, Object> m = lista.get(p);
-            h.t1.setText((String) m.get("nombre"));
-            h.t2.setText(String.format("%.0f kcal/100g", (Double) m.get("kcal")));
-            h.itemView.setOnClickListener(v -> listener.call(m));
+
+        @NonNull
+        @Override
+        public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+            View v = LayoutInflater.from(parent.getContext()).inflate(android.R.layout.simple_list_item_2, parent, false);
+            return new ViewHolder(v);
         }
-        @Override public int getItemCount() { return lista.size(); }
-        static class VH extends RecyclerView.ViewHolder {
+
+        @Override
+        public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
+            Map<String, Object> item = items.get(position);
+            holder.t1.setText((String) item.get("nombre"));
+            holder.t2.setText(String.format(Locale.getDefault(), "%.0f kcal / 100g", (Double) item.get("kcal")));
+            holder.itemView.setOnClickListener(v -> listener.onItemClick(item));
+        }
+
+        @Override public int getItemCount() { return items.size(); }
+
+        class ViewHolder extends RecyclerView.ViewHolder {
             TextView t1, t2;
-            VH(View i) { super(i); t1 = i.findViewById(R.id.tvNombreResultado); t2 = i.findViewById(R.id.tvKcalResultado); }
+            ViewHolder(View v) {
+                super(v);
+                t1 = v.findViewById(android.R.id.text1);
+                t2 = v.findViewById(android.R.id.text2);
+            }
         }
     }
 
-    private static class IngredientesAdapter extends RecyclerView.Adapter<IngredientesAdapter.VH> {
-        private final List<Map<String, Object>> lista;
-        IngredientesAdapter(List<Map<String, Object>> l) { this.lista = l; }
-        @NonNull @Override public VH onCreateViewHolder(@NonNull ViewGroup p, int t) {
-            View v = LayoutInflater.from(p.getContext()).inflate(android.R.layout.simple_list_item_2, p, false);
-            return new VH(v);
+    private class IngredientesAdapter extends RecyclerView.Adapter<IngredientesAdapter.ViewHolder> {
+        private final List<Map<String, Object>> items;
+        public IngredientesAdapter(List<Map<String, Object>> items) { this.items = items; }
+
+        @NonNull
+        @Override
+        public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+            View v = LayoutInflater.from(parent.getContext()).inflate(android.R.layout.simple_list_item_2, parent, false);
+            return new ViewHolder(v);
         }
-        @Override public void onBindViewHolder(@NonNull VH h, int p) {
-            Map<String, Object> m = lista.get(p);
-            h.t1.setText(String.format("%s (%.0fg)", m.get("nombre"), m.get("gramos")));
-            h.t2.setText(String.format("%.0f kcal | P: %.1fg | C: %.1fg | G: %.1fg", 
-                (Double)m.get("kcal"), (Double)m.get("prot"), (Double)m.get("carb"), (Double)m.get("grasas")));
+
+        @Override
+        public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
+            Map<String, Object> item = items.get(position);
+            holder.t1.setText(String.format("%s (%.0fg)", item.get("nombre"), (Double) item.get("gramos")));
+            holder.t2.setText(String.format(Locale.getDefault(), "%.1f kcal | P: %.1fg | C: %.1fg | G: %.1fg", 
+                    (Double) item.get("kcal"), (Double) item.get("prot"), (Double) item.get("carb"), (Double) item.get("grasas")));
         }
-        @Override public int getItemCount() { return lista.size(); }
-        static class VH extends RecyclerView.ViewHolder {
+
+        @Override public int getItemCount() { return items.size(); }
+
+        class ViewHolder extends RecyclerView.ViewHolder {
             TextView t1, t2;
-            VH(View i) { super(i); t1 = i.findViewById(android.R.id.text1); t2 = i.findViewById(android.R.id.text2); }
+            ViewHolder(View v) {
+                super(v);
+                t1 = v.findViewById(android.R.id.text1);
+                t2 = v.findViewById(android.R.id.text2);
+            }
         }
+    }
+
+    interface OnItemClickListener {
+        void onItemClick(Map<String, Object> item);
     }
 }
