@@ -2,8 +2,9 @@ package com.example.tif_gr31.activities;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
-import android.widget.Button;
+import android.widget.TextView;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -12,9 +13,38 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
 import com.example.tif_gr31.R;
-import com.google.android.material.card.MaterialCardView;
+import com.example.tif_gr31.utils.NavigationHelper;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.android.material.progressindicator.CircularProgressIndicator;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
+
+import java.util.Calendar;
+import java.util.HashMap;
+import java.util.Map;
 
 public class InicioActivity extends AppCompatActivity {
+
+    private static final String TAG = "InicioActivity";
+    
+    private TextView txtCaloriasRestantesCentro, txtObjetivoTotalCalorias;
+    private CircularProgressIndicator progresoCaloriasCircular;
+    
+    private TextView txtCarbosGramos, txtProteinasGramos, txtGrasasGramos;
+    private CircularProgressIndicator progresoCarbos, progresoProteinas, progresoGrasas;
+    
+    private FirebaseAuth mAuth;
+    private FirebaseFirestore db;
+    
+    private double objetivoCaloricoTotal = 0;
+    private double calsConsumidas = 0, carbosConsumidos = 0, protConsumidas = 0, grasasConsumidas = 0;
+
+    private final String[] categorias = {"Desayuno", "Almuerzo", "Merienda", "Cena", "Snacks"};
+    private final String[] emojis = {"🥐", "🍝", "☕", "🍲", "🍎"};
+    private final Map<String, Double> consumoPorCategoria = new HashMap<>();
+    private final Map<String, View> mealViews = new HashMap<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,41 +59,146 @@ public class InicioActivity extends AppCompatActivity {
             return insets;
         });
 
-        /// Referencias a los botones del layout
-        Button BtnRegistrarComida = findViewById(R.id.BtnRegisComida);
-        MaterialCardView BtnEstadisticas = findViewById(R.id.BtnEstadisticas);
-        MaterialCardView BtnRecomendaciones = findViewById(R.id.BtnRecomendaciones);
-        MaterialCardView BtnHistorial = findViewById(R.id.BtnHistorial);
-        MaterialCardView BtnPerfil = findViewById(R.id.BtnPerfil);
+        mAuth = FirebaseAuth.getInstance();
+        db = FirebaseFirestore.getInstance();
 
-        /// Navegacion a pantalla Registrar comida
-        BtnRegistrarComida.setOnClickListener(v -> {
-            Intent intent = new Intent(InicioActivity.this, RegistrarComidaActivity.class);
-            startActivity(intent);
-        });
+        vincularVistas();
+        setupMealItems();
 
-        /// Navegacion a pantalla Estadisticas
-        BtnEstadisticas.setOnClickListener(v -> {
-            Intent intent = new Intent(InicioActivity.this, EstadisticasActivity.class);
-            startActivity(intent);
-        });
+        BottomNavigationView bottomNav = findViewById(R.id.bottomNav);
+        NavigationHelper.setupBottomNavigation(this, bottomNav, R.id.menu_inicio);
 
-        /// Navegacion a pantalla Recomendaciones
-        BtnRecomendaciones.setOnClickListener(v -> {
-            Intent intent = new Intent(InicioActivity.this, RecomendacionesActivity.class);
-            startActivity(intent);
-        });
+        cargarDatosResumen();
+    }
 
-        /// Navegacion a pantalla Historial
-        BtnHistorial.setOnClickListener(v -> {
-            Intent intent = new Intent(InicioActivity.this, HistorialActivity.class);
-            startActivity(intent);
-        });
+    private void vincularVistas() {
+        // Calorías
+        txtCaloriasRestantesCentro = findViewById(R.id.txtCaloriasRestantesCentro);
+        txtObjetivoTotalCalorias = findViewById(R.id.txtObjetivoTotalCalorias);
+        progresoCaloriasCircular = findViewById(R.id.progresoCaloriasCircular);
 
-        /// Navegacion a pantalla Perfil
-        BtnPerfil.setOnClickListener(v -> {
-            Intent intent = new Intent(InicioActivity.this, PerfilActivity.class);
-            startActivity(intent);
-        });
+        // Macros
+        txtCarbosGramos = findViewById(R.id.txtCarbosGramos);
+        txtProteinasGramos = findViewById(R.id.txtProteinasGramos);
+        txtGrasasGramos = findViewById(R.id.txtGrasasGramos);
+        progresoCarbos = findViewById(R.id.progresoCarbos);
+        progresoProteinas = findViewById(R.id.progresoProteinas);
+        progresoGrasas = findViewById(R.id.progresoGrasas);
+
+        // Comidas
+        mealViews.put("Desayuno", findViewById(R.id.itemDesayuno));
+        mealViews.put("Almuerzo", findViewById(R.id.itemAlmuerzo));
+        mealViews.put("Merienda", findViewById(R.id.itemMerienda));
+        mealViews.put("Cena", findViewById(R.id.itemCena));
+        mealViews.put("Snacks", findViewById(R.id.itemSnacks));
+    }
+
+    private void setupMealItems() {
+        for (int i = 0; i < categorias.length; i++) {
+            String cat = categorias[i];
+            View view = mealViews.get(cat);
+            if (view != null) {
+                ((TextView)view.findViewById(R.id.txtComidaNombre)).setText(cat);
+                ((TextView)view.findViewById(R.id.imgComidaIcono)).setText(emojis[i]);
+                view.findViewById(R.id.btnAgregarComida).setOnClickListener(v -> {
+                    Intent intent = new Intent(this, RegistrarComidaActivity.class);
+                    intent.putExtra("CATEGORIA_SELECCIONADA", cat);
+                    startActivity(intent);
+                });
+            }
+        }
+    }
+
+    private void cargarDatosResumen() {
+        FirebaseUser user = mAuth.getCurrentUser();
+        if (user == null) return;
+
+        db.collection("usuarios").document(user.getUid()).get()
+                .addOnSuccessListener(doc -> {
+                    if (doc.exists()) {
+                        Object perfilObj = doc.get("perfil");
+                        if (perfilObj instanceof Map) {
+                            Map<String, Object> perfil = (Map<String, Object>) perfilObj;
+                            if (perfil.containsKey("calorias_estimadas")) {
+                                objetivoCaloricoTotal = ((Number) perfil.get("calorias_estimadas")).doubleValue();
+                            }
+                        }
+                        obtenerConsumoDelDia(user.getUid());
+                    }
+                });
+    }
+
+    private void obtenerConsumoDelDia(String userId) {
+        Calendar cal = Calendar.getInstance();
+        String hoy = cal.get(Calendar.YEAR) + "-" + String.format("%02d", (cal.get(Calendar.MONTH) + 1)) + "-" + String.format("%02d", cal.get(Calendar.DAY_OF_MONTH));
+
+        db.collection("usuarios").document(userId).collection("comidas")
+                .whereEqualTo("fecha", hoy)
+                .get()
+                .addOnSuccessListener(queryDocumentSnapshots -> {
+                    resetearTotales();
+                    for (DocumentSnapshot doc : queryDocumentSnapshots) {
+                        calsConsumidas += doc.getDouble("calorias") != null ? doc.getDouble("calorias") : 0;
+                        carbosConsumidos += doc.getDouble("carbohidratos") != null ? doc.getDouble("carbohidratos") : 0;
+                        protConsumidas += doc.getDouble("proteinas") != null ? doc.getDouble("proteinas") : 0;
+                        grasasConsumidas += doc.getDouble("grasas") != null ? doc.getDouble("grasas") : 0;
+                        
+                        String cat = doc.getString("categoria");
+                        if (cat != null && consumoPorCategoria.containsKey(cat)) {
+                            consumoPorCategoria.put(cat, consumoPorCategoria.get(cat) + (doc.getDouble("calorias") != null ? doc.getDouble("calorias") : 0));
+                        }
+                    }
+                    actualizarUI();
+                });
+    }
+
+    private void resetearTotales() {
+        calsConsumidas = 0; carbosConsumidos = 0; protConsumidas = 0; grasasConsumidas = 0;
+        for (String cat : categorias) consumoPorCategoria.put(cat, 0.0);
+    }
+
+    private void actualizarUI() {
+        // Calorías
+        double restantes = Math.max(0, objetivoCaloricoTotal - calsConsumidas);
+        txtCaloriasRestantesCentro.setText(String.format("%.0f", restantes));
+        txtObjetivoTotalCalorias.setText(String.format("Objetivo: %.0f kcal", objetivoCaloricoTotal));
+        
+        if (objetivoCaloricoTotal > 0) {
+            int progreso = (int) ((calsConsumidas / objetivoCaloricoTotal) * 100);
+            progresoCaloriasCircular.setProgress(Math.min(progreso, 100));
+        }
+
+        // Macronutrientes (Estimación de objetivos basada en porcentajes estándar si no hay perfil de macros)
+        // Carbos: 50%, Prots: 20%, Grasas: 30% del objetivo calórico
+        double objCarbos = (objetivoCaloricoTotal * 0.5) / 4;
+        double objProt = (objetivoCaloricoTotal * 0.2) / 4;
+        double objGrasa = (objetivoCaloricoTotal * 0.3) / 9;
+
+        actualizarMacroCircle(progresoCarbos, txtCarbosGramos, carbosConsumidos, objCarbos);
+        actualizarMacroCircle(progresoProteinas, txtProteinasGramos, protConsumidas, objProt);
+        actualizarMacroCircle(progresoGrasas, txtGrasasGramos, grasasConsumidas, objGrasa);
+
+        // Comidas
+        for (String cat : categorias) {
+            double objCat = cat.equals("Snacks") ? objetivoCaloricoTotal * 0.1 : objetivoCaloricoTotal * 0.225;
+            View v = mealViews.get(cat);
+            if (v != null) {
+                ((TextView)v.findViewById(R.id.txtComidaCalorias)).setText(String.format("%.0f / %.0f kcal", consumoPorCategoria.get(cat), objCat));
+            }
+        }
+    }
+
+    private void actualizarMacroCircle(CircularProgressIndicator cp, TextView tv, double valor, double objetivo) {
+        tv.setText(String.format("%.0fg", valor));
+        if (objetivo > 0) {
+            int prog = (int) ((valor / objetivo) * 100);
+            cp.setProgress(Math.min(prog, 100));
+        }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        cargarDatosResumen();
     }
 }

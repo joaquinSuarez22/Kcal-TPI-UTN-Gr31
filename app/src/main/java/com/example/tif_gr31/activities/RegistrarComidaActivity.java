@@ -33,6 +33,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -46,7 +47,7 @@ import retrofit2.Response;
 public class RegistrarComidaActivity extends AppCompatActivity {
 
     private static final String USDA_API_KEY = "BpuqGxfs81r5NeHjS2pe7fdWV2fRJY5vKd59lgnI";
-    private static final String[] TIPOS_COMIDA = {"Desayuno", "Almuerzo", "Merienda", "Cena", "Snack"};
+    private static final String[] TIPOS_COMIDA = {"Desayuno", "Almuerzo", "Merienda", "Cena", "Snacks"};
 
     private EditText etBuscarAlimento, etGramos;
     private ImageView btnLimpiarBusqueda;
@@ -85,9 +86,22 @@ public class RegistrarComidaActivity extends AppCompatActivity {
         configurarSpinner();
         configurarCampoGramos();
 
+        // Manejar la categoría preseleccionada desde el Dashboard
+        manejarCategoriaPreseleccionada();
+
         btnAgregarIngrediente.setOnClickListener(v -> agregarIngredienteALista());
         btnGuardarComida.setOnClickListener(v -> guardarComidaCompleta());
         findViewById(R.id.btnBack).setOnClickListener(v -> finish());
+    }
+
+    private void manejarCategoriaPreseleccionada() {
+        String categoria = getIntent().getStringExtra("CATEGORIA_SELECCIONADA");
+        if (categoria != null) {
+            int position = Arrays.asList(TIPOS_COMIDA).indexOf(categoria);
+            if (position >= 0) {
+                spinnerTipoComida.setSelection(position);
+            }
+        }
     }
 
     private void vincularVistas() {
@@ -282,23 +296,29 @@ public class RegistrarComidaActivity extends AppCompatActivity {
         }
 
         String uid = auth.getCurrentUser() != null ? auth.getCurrentUser().getUid() : "anonimo";
-        String fecha = new SimpleDateFormat("yyyy-MM-dd HH:mm", Locale.getDefault()).format(new Date());
+        String fecha = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(new Date());
 
         Map<String, Object> comida = new HashMap<>();
         comida.put("uid", uid);
         comida.put("fecha", fecha);
-        comida.put("tipoComida", spinnerTipoComida.getSelectedItem().toString());
+        comida.put("categoria", spinnerTipoComida.getSelectedItem().toString());
         comida.put("ingredientes", listaIngredientes);
-        comida.put("calorias", totalKcal); // Mantenemos el nombre del campo por consistencia
+        comida.put("calorias", totalKcal);
         comida.put("proteinas", totalProt);
         comida.put("carbohidratos", totalCarb);
         comida.put("grasas", totalGrasa);
 
         btnGuardarComida.setEnabled(false);
-        db.collection("comidas").add(comida).addOnSuccessListener(doc -> {
-            Toast.makeText(this, "¡Comida guardada!", Toast.LENGTH_SHORT).show();
-            finish();
-        }).addOnFailureListener(e -> btnGuardarComida.setEnabled(true));
+        db.collection("usuarios").document(uid).collection("comidas")
+                .add(comida)
+                .addOnSuccessListener(doc -> {
+                    Toast.makeText(this, "¡Comida guardada!", Toast.LENGTH_SHORT).show();
+                    finish();
+                })
+                .addOnFailureListener(e -> {
+                    btnGuardarComida.setEnabled(true);
+                    Toast.makeText(this, "Error al guardar", Toast.LENGTH_SHORT).show();
+                });
     }
 
     // ADAPTADORES

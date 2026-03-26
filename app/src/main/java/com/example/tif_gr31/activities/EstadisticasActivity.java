@@ -1,11 +1,11 @@
 package com.example.tif_gr31.activities;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
 import androidx.appcompat.app.AppCompatActivity;
 import com.example.tif_gr31.R;
+import com.example.tif_gr31.utils.NavigationHelper;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.button.MaterialButton;
 
@@ -33,21 +33,8 @@ public class EstadisticasActivity extends AppCompatActivity {
             }
         });
 
-        btnShare.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                // Lógica para compartir estadísticas
-            }
-        });
-
-        btnRecomendaciones.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                // Lógica para ir a recomendaciones
-            }
-        });
-
-        // Listener del menú inferior agregado externamente en tu aplicación
-        // bottomNav.setOnItemSelectedListener( ... );
+        if (bottomNav != null) {
+            NavigationHelper.setupBottomNavigation(this, bottomNav, R.id.menu_estadisticas);
+        }
     }
 }

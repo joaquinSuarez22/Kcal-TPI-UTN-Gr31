@@ -3,13 +3,13 @@
 
     <item
         android:id="@+id/menu_inicio"
-        android:icon="@android:drawable/ic_menu_view"
+        android:icon="@android:drawable/ic_menu_today"
         android:title="Inicio"/>
 
     <item
-        android:id="@+id/menu_diario"
-        android:icon="@android:drawable/ic_menu_agenda"
-        android:title="Diario"/>
+        android:id="@+id/menu_historial"
+        android:icon="@android:drawable/ic_menu_recent_history"
+        android:title="Historial"/>
 
     <item
         android:id="@+id/menu_estadisticas"
@@ -17,8 +17,8 @@
         android:title="Estadísticas"/>
 
     <item
-        android:id="@+id/menu_ajustes"
-        android:icon="@android:drawable/ic_menu_manage"
-        android:title="Ajustes"/>
+        android:id="@+id/menu_perfil"
+        android:icon="@android:drawable/ic_menu_myplaces"
+        android:title="Perfil"/>
 
 </menu>

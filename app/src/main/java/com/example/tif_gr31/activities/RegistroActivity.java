@@ -7,15 +7,13 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.graphics.Insets;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowInsetsCompat;
 
 import com.example.tif_gr31.R;
+import com.google.android.material.textfield.TextInputEditText;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.FieldValue;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -23,45 +21,31 @@ import java.util.Map;
 public class RegistroActivity extends AppCompatActivity {
 
     private FirebaseAuth mAuth;
-    private FirebaseFirestore db = FirebaseFirestore.getInstance();
+    private FirebaseFirestore db;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        EdgeToEdge.enable(this);
         setContentView(R.layout.activity_registro);
 
-        // Inicializar Firebase Auth
+        // Inicializar Firebase
         mAuth = FirebaseAuth.getInstance();
+        db = FirebaseFirestore.getInstance();
 
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
-            Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
-            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
-            return insets;
-        });
+        // Referencias a la UI
+        TextInputEditText txtEmail = findViewById(R.id.emailRegister);
+        TextInputEditText txtPassword = findViewById(R.id.passwordRegister);
+        Button btnRegistrar = findViewById(R.id.BtnRegistrar);
 
-        /// guardamos botones y campos
-        Button BtnConfirmar = findViewById(R.id.BtnRegistrar);
-        Button BtnRegresar = findViewById(R.id.btnYaCuenta);
-        EditText txtEmail = findViewById(R.id.emailRegister);
-        EditText txtPassword = findViewById(R.id.passwordRegister);
-        EditText txtRepPass = findViewById(R.id.repeatPassword);
-
-        BtnConfirmar.setOnClickListener(new View.OnClickListener() {
+        // Evento para Registrar Usuario
+        btnRegistrar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 String email = txtEmail.getText().toString().trim();
                 String pass = txtPassword.getText().toString().trim();
-                String repetir = txtRepPass.getText().toString().trim();
 
-                // Validaciones básicas
-                if (email.isEmpty() || pass.isEmpty() || repetir.isEmpty()) {
-                    Toast.makeText(RegistroActivity.this, "Por favor, complete todos los campos", Toast.LENGTH_SHORT).show();
-                    return;
-                }
-
-                if (!pass.equals(repetir)) {
-                    Toast.makeText(RegistroActivity.this, "Las contraseñas no coinciden", Toast.LENGTH_SHORT).show();
+                if (email.isEmpty() || pass.isEmpty()) {
+                    Toast.makeText(RegistroActivity.this, "Por favor, completa todos los campos", Toast.LENGTH_SHORT).show();
                     return;
                 }
 
@@ -70,42 +54,61 @@ public class RegistroActivity extends AppCompatActivity {
                     return;
                 }
 
-                // 1. Registro en Firebase Authentication
+                // Crear usuario en Firebase Authentication
                 mAuth.createUserWithEmailAndPassword(email, pass)
-                        .addOnCompleteListener(RegistroActivity.this, task -> {
+                        .addOnCompleteListener(task -> {
                             if (task.isSuccessful()) {
-                                // 2. Si Auth es exitoso, guardamos el perfil en Firestore
+                                // Obtener el ID del usuario recién creado
                                 String userId = mAuth.getCurrentUser().getUid();
-                                Map<String, Object> usuario = new HashMap<>();
-                                usuario.put("email", email);
-                                usuario.put("id", userId);
 
-                                db.collection("usuarios").document(userId)
-                                        .set(usuario)
-                                        .addOnSuccessListener(aVoid -> {
-                                            Toast.makeText(RegistroActivity.this, "Usuario registrado con éxito", Toast.LENGTH_SHORT).show();
-                                            // Redirigir al Login o cerrar actividad
-                                            finish();
-                                        })
-                                        .addOnFailureListener(e -> {
-                                            Toast.makeText(RegistroActivity.this, "Error al guardar datos: " + e.getMessage(), Toast.LENGTH_SHORT).show();
-                                        });
+                                // Crear documento en Firestore con estructura completa
+                                crearUsuarioEnFirestore(userId, email);
+
                             } else {
-                                // Error en la creación de la cuenta (ej. email ya usado)
-                                Toast.makeText(RegistroActivity.this, "Error de registro: " + task.getException().getMessage(), Toast.LENGTH_LONG).show();
+                                Toast.makeText(RegistroActivity.this, "Error: " + task.getException().getMessage(), Toast.LENGTH_LONG).show();
                             }
                         });
             }
         });
+    }
 
-        /// evento click para volver al login
-        BtnRegresar.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(RegistroActivity.this, LoginActivity.class);
-                startActivity(intent);
+    /**
+     * Crea el documento del usuario en Firestore con estructura completa de perfil
+     */
+    private void crearUsuarioEnFirestore(String userId, String email) {
+        // Crear objeto usuario principal
+        Map<String, Object> usuario = new HashMap<>();
+        usuario.put("email", email);
+        usuario.put("nombre", ""); // Vacío, lo completará después
+        usuario.put("created_at", FieldValue.serverTimestamp());
 
-            }
-        });
+        // Crear objeto perfil con valores por defecto
+        Map<String, Object> perfil = new HashMap<>();
+        perfil.put("edad", 0);
+        perfil.put("peso", 0.0);
+        perfil.put("altura", 0);
+        perfil.put("sexo", ""); // Vacío
+        perfil.put("nivel_actividad", ""); // Vacío
+        perfil.put("objetivo", ""); // Vacío
+        perfil.put("calorias_estimadas", 0.0);
+
+        // Agregar perfil al usuario
+        usuario.put("perfil", perfil);
+
+        // Guardar en Firestore
+        db.collection("usuarios")
+                .document(userId)
+                .set(usuario)
+                .addOnSuccessListener(aVoid -> {
+                    Toast.makeText(RegistroActivity.this, "¡Cuenta creada exitosamente!", Toast.LENGTH_SHORT).show();
+
+                    // Redirigir al login
+                    Intent intent = new Intent(RegistroActivity.this, LoginActivity.class);
+                    startActivity(intent);
+                    finish();
+                })
+                .addOnFailureListener(e -> {
+                    Toast.makeText(RegistroActivity.this, "Error al crear perfil: " + e.getMessage(), Toast.LENGTH_LONG).show();
+                });
     }
 }
