@@ -5,13 +5,13 @@ import android.os.Handler;
 import android.os.Looper;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -49,13 +49,14 @@ import retrofit2.Response;
 
 public class RegistrarComidaActivity extends AppCompatActivity {
 
+    private static final String TAG = "RegistrarComidaAct";
     private static final String USDA_API_KEY = "BpuqGxfs81r5NeHjS2pe7fdWV2fRJY5vKd59lgnI";
     private static final String[] TIPOS_COMIDA = {"Desayuno", "Almuerzo", "Merienda", "Cena", "Snacks"};
 
     private EditText etBuscarAlimento, etGramos;
     private ImageView btnLimpiarBusqueda;
     private RecyclerView rvResultadosBusqueda, rvIngredientesAgregados;
-    private LinearLayout cardAlimentoSeleccionado;
+    private View cardAlimentoSeleccionado;
     private TextView tvNombreAlimentoSeleccionado, tvTotalCalorias, tvTotalMacros;
     private TextView tvCaloriasCalculadas, tvProteinasCalculadas, tvCarbosCalculados, tvGrasasCalculadas;
     private Spinner spinnerTipoComida;
@@ -78,15 +79,19 @@ public class RegistrarComidaActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Log.d(TAG, "onCreate: Iniciando actividad de registro");
         
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_registrar_comida);
 
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.registrarComidaMain), (v, insets) -> {
-            Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
-            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
-            return insets;
-        });
+        View mainView = findViewById(R.id.registrarComidaMain);
+        if (mainView != null) {
+            ViewCompat.setOnApplyWindowInsetsListener(mainView, (v, insets) -> {
+                Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
+                v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
+                return insets;
+            });
+        }
 
         db = FirebaseFirestore.getInstance();
         auth = FirebaseAuth.getInstance();
@@ -97,20 +102,27 @@ public class RegistrarComidaActivity extends AppCompatActivity {
         configurarSpinner();
         configurarCampoGramos();
 
-        // Manejar la categoría preseleccionada desde el Dashboard
         manejarCategoriaPreseleccionada();
 
-        // Configuración de Navegación Flotante
+        // Configuración de Navegación Flotante (sin activar ningún ítem)
         FloatingNavigationHelper.setupFloatingNavigation(this, -1);
 
-        btnAgregarIngrediente.setOnClickListener(v -> agregarIngredienteALista());
-        btnGuardarComida.setOnClickListener(v -> guardarComidaCompleta());
-        findViewById(R.id.btnBack).setOnClickListener(v -> finish());
+        if (btnAgregarIngrediente != null) {
+            btnAgregarIngrediente.setOnClickListener(v -> agregarIngredienteALista());
+        }
+        if (btnGuardarComida != null) {
+            btnGuardarComida.setOnClickListener(v -> guardarComidaCompleta());
+        }
+        
+        View btnBack = findViewById(R.id.btnBack);
+        if (btnBack != null) {
+            btnBack.setOnClickListener(v -> finish());
+        }
     }
 
     private void manejarCategoriaPreseleccionada() {
         String categoria = getIntent().getStringExtra("CATEGORIA_SELECCIONADA");
-        if (categoria != null) {
+        if (categoria != null && spinnerTipoComida != null) {
             int position = Arrays.asList(TIPOS_COMIDA).indexOf(categoria);
             if (position >= 0) {
                 spinnerTipoComida.setSelection(position);
@@ -139,26 +151,34 @@ public class RegistrarComidaActivity extends AppCompatActivity {
     }
 
     private void configurarAdapters() {
-        rvResultadosBusqueda.setLayoutManager(new LinearLayoutManager(this));
-        resultadosAdapter = new ResultadosAdapter(listaResultados, this::onAlimentoSeleccionadoDeBusqueda);
-        rvResultadosBusqueda.setAdapter(resultadosAdapter);
+        if (rvResultadosBusqueda != null) {
+            rvResultadosBusqueda.setLayoutManager(new LinearLayoutManager(this));
+            resultadosAdapter = new ResultadosAdapter(listaResultados, this::onAlimentoSeleccionadoDeBusqueda);
+            rvResultadosBusqueda.setAdapter(resultadosAdapter);
+        }
 
-        rvIngredientesAgregados.setLayoutManager(new LinearLayoutManager(this));
-        ingredientesAdapter = new IngredientesAdapter(listaIngredientes);
-        rvIngredientesAgregados.setAdapter(ingredientesAdapter);
+        if (rvIngredientesAgregados != null) {
+            rvIngredientesAgregados.setLayoutManager(new LinearLayoutManager(this));
+            ingredientesAdapter = new IngredientesAdapter(listaIngredientes);
+            rvIngredientesAgregados.setAdapter(ingredientesAdapter);
+        }
     }
 
     private void configurarBusqueda() {
+        if (etBuscarAlimento == null) return;
+        
         etBuscarAlimento.addTextChangedListener(new TextWatcher() {
             @Override public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
             @Override public void onTextChanged(CharSequence s, int start, int before, int count) {}
             @Override
             public void afterTextChanged(Editable s) {
                 String query = s.toString().trim();
-                btnLimpiarBusqueda.setVisibility(query.isEmpty() ? View.GONE : View.VISIBLE);
+                if (btnLimpiarBusqueda != null) {
+                    btnLimpiarBusqueda.setVisibility(query.isEmpty() ? View.GONE : View.VISIBLE);
+                }
                 if (debouncedSearch != null) debounceHandler.removeCallbacks(debouncedSearch);
                 if (query.length() < 2) {
-                    rvResultadosBusqueda.setVisibility(View.GONE);
+                    if (rvResultadosBusqueda != null) rvResultadosBusqueda.setVisibility(View.GONE);
                     return;
                 }
                 debouncedSearch = () -> buscarEnUSDA(query);
@@ -166,24 +186,28 @@ public class RegistrarComidaActivity extends AppCompatActivity {
             }
         });
 
-        btnLimpiarBusqueda.setOnClickListener(v -> {
-            etBuscarAlimento.setText("");
-            rvResultadosBusqueda.setVisibility(View.GONE);
-        });
+        if (btnLimpiarBusqueda != null) {
+            btnLimpiarBusqueda.setOnClickListener(v -> {
+                etBuscarAlimento.setText("");
+                if (rvResultadosBusqueda != null) rvResultadosBusqueda.setVisibility(View.GONE);
+            });
+        }
     }
 
     private void configurarCampoGramos() {
+        if (etGramos == null) return;
         etGramos.addTextChangedListener(new TextWatcher() {
             @Override public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
             @Override public void onTextChanged(CharSequence s, int start, int before, int count) {}
-            @Override public void afterTextChanged(Editable s) {
+            @Override
+            public void afterTextChanged(Editable s) {
                 recalcularMacrosTemporales();
             }
         });
     }
 
     private void recalcularMacrosTemporales() {
-        if (alimentoActual == null) return;
+        if (alimentoActual == null || etGramos == null) return;
         String gramosStr = etGramos.getText().toString().trim();
         if (gramosStr.isEmpty()) {
             resetearDashboard();
@@ -193,23 +217,24 @@ public class RegistrarComidaActivity extends AppCompatActivity {
         try {
             double gramos = Double.parseDouble(gramosStr);
             double factor = gramos / 100.0;
-            tvCaloriasCalculadas.setText(String.format(Locale.getDefault(), "%.0f", alimentoActual.getKcal() * factor));
-            tvProteinasCalculadas.setText(String.format(Locale.getDefault(), "%.1f", alimentoActual.getProteinas() * factor));
-            tvCarbosCalculados.setText(String.format(Locale.getDefault(), "%.1f", alimentoActual.getCarbohidratos() * factor));
-            tvGrasasCalculadas.setText(String.format(Locale.getDefault(), "%.1f", alimentoActual.getGrasas() * factor));
+            if (tvCaloriasCalculadas != null) tvCaloriasCalculadas.setText(String.format(Locale.getDefault(), "%.0f", alimentoActual.getKcal() * factor));
+            if (tvProteinasCalculadas != null) tvProteinasCalculadas.setText(String.format(Locale.getDefault(), "%.1f", alimentoActual.getProteinas() * factor));
+            if (tvCarbosCalculados != null) tvCarbosCalculados.setText(String.format(Locale.getDefault(), "%.1f", alimentoActual.getCarbohidratos() * factor));
+            if (tvGrasasCalculadas != null) tvGrasasCalculadas.setText(String.format(Locale.getDefault(), "%.1f", alimentoActual.getGrasas() * factor));
         } catch (Exception e) {
             resetearDashboard();
         }
     }
 
     private void resetearDashboard() {
-        tvCaloriasCalculadas.setText("0");
-        tvProteinasCalculadas.setText("0");
-        tvCarbosCalculados.setText("0");
-        tvGrasasCalculadas.setText("0");
+        if (tvCaloriasCalculadas != null) tvCaloriasCalculadas.setText("0");
+        if (tvProteinasCalculadas != null) tvProteinasCalculadas.setText("0");
+        if (tvCarbosCalculados != null) tvCarbosCalculados.setText("0");
+        if (tvGrasasCalculadas != null) tvGrasasCalculadas.setText("0");
     }
 
     private void configurarSpinner() {
+        if (spinnerTipoComida == null) return;
         ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, TIPOS_COMIDA);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinnerTipoComida.setAdapter(adapter);
@@ -232,65 +257,77 @@ public class RegistrarComidaActivity extends AppCompatActivity {
                         }
                     }
                     runOnUiThread(() -> {
-                        resultadosAdapter.notifyDataSetChanged();
-                        rvResultadosBusqueda.setVisibility(listaResultados.isEmpty() ? View.GONE : View.VISIBLE);
+                        if (resultadosAdapter != null) resultadosAdapter.notifyDataSetChanged();
+                        if (rvResultadosBusqueda != null) rvResultadosBusqueda.setVisibility(listaResultados.isEmpty() ? View.GONE : View.VISIBLE);
                     });
                 }
             }
             @Override
-            public void onFailure(Call<FoodSearchResponse> call, Throwable t) {}
+            public void onFailure(Call<FoodSearchResponse> call, Throwable t) {
+                Log.e(TAG, "onFailure: Error en API USDA", t);
+            }
         });
     }
 
     private void onAlimentoSeleccionadoDeBusqueda(Map<String, Object> map) {
         alimentoActual = (FoodProduct) map.get("rawObject");
-        tvNombreAlimentoSeleccionado.setText(alimentoActual.getNombre());
-        cardAlimentoSeleccionado.setVisibility(View.VISIBLE);
-        rvResultadosBusqueda.setVisibility(View.GONE);
-        etGramos.requestFocus();
+        if (tvNombreAlimentoSeleccionado != null) tvNombreAlimentoSeleccionado.setText(alimentoActual.getNombre());
+        if (cardAlimentoSeleccionado != null) cardAlimentoSeleccionado.setVisibility(View.VISIBLE);
+        if (rvResultadosBusqueda != null) rvResultadosBusqueda.setVisibility(View.GONE);
+        if (etGramos != null) {
+            etGramos.requestFocus();
+        }
         recalcularMacrosTemporales();
     }
 
     private void agregarIngredienteALista() {
+        if (etGramos == null || alimentoActual == null) return;
         String gramosStr = etGramos.getText().toString();
-        if (gramosStr.isEmpty() || alimentoActual == null) return;
+        if (gramosStr.isEmpty()) {
+            Toast.makeText(this, "Ingresa los gramos", Toast.LENGTH_SHORT).show();
+            return;
+        }
 
-        double gramos = Double.parseDouble(gramosStr);
-        double factor = gramos / 100.0;
-        
-        double kcalFinal = alimentoActual.getKcal() * factor;
-        double protFinal = alimentoActual.getProteinas() * factor;
-        double carbFinal = alimentoActual.getCarbohidratos() * factor;
-        double grasaFinal = alimentoActual.getGrasas() * factor;
+        try {
+            double gramos = Double.parseDouble(gramosStr);
+            double factor = gramos / 100.0;
+            
+            double kcalFinal = alimentoActual.getKcal() * factor;
+            double protFinal = alimentoActual.getProteinas() * factor;
+            double carbFinal = alimentoActual.getCarbohidratos() * factor;
+            double grasaFinal = alimentoActual.getGrasas() * factor;
 
-        Map<String, Object> ingrediente = new HashMap<>();
-        ingrediente.put("nombre", alimentoActual.getNombre());
-        ingrediente.put("gramos", gramos);
-        ingrediente.put("kcal", kcalFinal);
-        ingrediente.put("prot", protFinal);
-        ingrediente.put("carb", carbFinal);
-        ingrediente.put("grasas", grasaFinal);
+            Map<String, Object> ingrediente = new HashMap<>();
+            ingrediente.put("nombre", alimentoActual.getNombre());
+            ingrediente.put("gramos", gramos);
+            ingrediente.put("kcal", kcalFinal);
+            ingrediente.put("prot", protFinal);
+            ingrediente.put("carb", carbFinal);
+            ingrediente.put("grasas", grasaFinal);
 
-        listaIngredientes.add(ingrediente);
-        
-        totalKcal += kcalFinal;
-        totalProt += protFinal;
-        totalCarb += carbFinal;
-        totalGrasa += grasaFinal;
+            listaIngredientes.add(ingrediente);
+            
+            totalKcal += kcalFinal;
+            totalProt += protFinal;
+            totalCarb += carbFinal;
+            totalGrasa += grasaFinal;
 
-        actualizarResumenTotales();
-        ingredientesAdapter.notifyDataSetChanged();
+            actualizarResumenTotales();
+            if (ingredientesAdapter != null) ingredientesAdapter.notifyDataSetChanged();
 
-        // Limpiar para el siguiente ingrediente
-        alimentoActual = null;
-        cardAlimentoSeleccionado.setVisibility(View.GONE);
-        etBuscarAlimento.setText("");
-        etGramos.setText("");
+            // Limpiar para el siguiente ingrediente
+            alimentoActual = null;
+            if (cardAlimentoSeleccionado != null) cardAlimentoSeleccionado.setVisibility(View.GONE);
+            if (etBuscarAlimento != null) etBuscarAlimento.setText("");
+            etGramos.setText("");
+        } catch (Exception e) {
+            Toast.makeText(this, "Cantidad inválida", Toast.LENGTH_SHORT).show();
+        }
     }
 
     private void actualizarResumenTotales() {
-        tvTotalCalorias.setText(String.format(Locale.getDefault(), "Total: %.0f kcal", totalKcal));
-        tvTotalMacros.setText(String.format(Locale.getDefault(), "P: %.1fg | C: %.1fg | G: %.1fg", totalProt, totalCarb, totalGrasa));
+        if (tvTotalCalorias != null) tvTotalCalorias.setText(String.format(Locale.getDefault(), "Total: %.0f kcal", totalKcal));
+        if (tvTotalMacros != null) tvTotalMacros.setText(String.format(Locale.getDefault(), "P: %.1fg | C: %.1fg | G: %.1fg", totalProt, totalCarb, totalGrasa));
     }
 
     private void guardarComidaCompleta() {
@@ -300,9 +337,12 @@ public class RegistrarComidaActivity extends AppCompatActivity {
         }
 
         String userId = auth.getUid();
-        if (userId == null) return;
+        if (userId == null) {
+            Toast.makeText(this, "Usuario no autenticado", Toast.LENGTH_SHORT).show();
+            return;
+        }
 
-        String tipoComida = spinnerTipoComida.getSelectedItem().toString();
+        String tipoComida = (spinnerTipoComida != null) ? spinnerTipoComida.getSelectedItem().toString() : "Otro";
         String fechaHoy = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(new Date());
 
         Map<String, Object> comidaMap = new HashMap<>();
@@ -316,12 +356,15 @@ public class RegistrarComidaActivity extends AppCompatActivity {
         comidaMap.put("totalGrasa", totalGrasa);
         comidaMap.put("ingredientes", listaIngredientes);
 
-        db.collection("comidas").add(comidaMap)
+        db.collection("usuarios").document(userId).collection("comidas").add(comidaMap)
                 .addOnSuccessListener(documentReference -> {
                     Toast.makeText(this, "Comida guardada exitosamente", Toast.LENGTH_SHORT).show();
                     finish();
                 })
-                .addOnFailureListener(e -> Toast.makeText(this, "Error al guardar", Toast.LENGTH_SHORT).show());
+                .addOnFailureListener(e -> {
+                    Log.e(TAG, "guardarComidaCompleta: Error al guardar", e);
+                    Toast.makeText(this, "Error al guardar", Toast.LENGTH_SHORT).show();
+                });
     }
 
     // --- ADAPTERS INTERNOS ---
@@ -338,26 +381,29 @@ public class RegistrarComidaActivity extends AppCompatActivity {
         @NonNull
         @Override
         public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-            View v = LayoutInflater.from(parent.getContext()).inflate(android.R.layout.simple_list_item_2, parent, false);
+            View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_resultado_alimento, parent, false);
             return new ViewHolder(v);
         }
 
         @Override
         public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
             Map<String, Object> item = items.get(position);
-            holder.t1.setText((String) item.get("nombre"));
-            holder.t2.setText(String.format(Locale.getDefault(), "%.0f kcal / 100g", (Double) item.get("kcal")));
+            String nombre = (String) item.get("nombre");
+            Double kcal = (Double) item.get("kcal");
+            
+            holder.tvNombre.setText(nombre != null ? nombre : "Desconocido");
+            holder.tvKcal.setText(String.format(Locale.getDefault(), "%.0f kcal / 100g", kcal != null ? kcal : 0.0));
             holder.itemView.setOnClickListener(v -> listener.onItemClick(item));
         }
 
         @Override public int getItemCount() { return items.size(); }
 
         class ViewHolder extends RecyclerView.ViewHolder {
-            TextView t1, t2;
+            TextView tvNombre, tvKcal;
             ViewHolder(View v) {
                 super(v);
-                t1 = v.findViewById(android.R.id.text1);
-                t2 = v.findViewById(android.R.id.text2);
+                tvNombre = v.findViewById(R.id.tvNombreResultado);
+                tvKcal = v.findViewById(R.id.tvKcalResultado);
             }
         }
     }

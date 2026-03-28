@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -36,6 +37,7 @@ public class RegistroActivity extends AppCompatActivity {
         TextInputEditText txtPassword = findViewById(R.id.passwordRegister);
         Button btnRegistrar = findViewById(R.id.BtnRegistrar);
         Button btnYaCuenta = findViewById(R.id.btnYaCuenta);
+        ImageView btnBack = findViewById(R.id.btnBack);
 
         // Evento para Registrar Usuario
         btnRegistrar.setOnClickListener(new View.OnClickListener() {
@@ -80,6 +82,11 @@ public class RegistroActivity extends AppCompatActivity {
                 finish(); // Cerramos registro para volver al login
             }
         });
+
+        // Botón volver (flecha)
+        if (btnBack != null) {
+            btnBack.setOnClickListener(v -> finish());
+        }
     }
 
     /**

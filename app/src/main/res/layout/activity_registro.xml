@@ -12,7 +12,37 @@
         android:orientation="vertical"
         android:padding="24dp">
 
-        <!-- Logo/Header Space -->
+        <!-- Header -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:layout_marginTop="20dp">
+
+            <ImageView
+                android:id="@+id/btnBack"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:padding="12dp"
+                android:src="@android:drawable/ic_media_previous"
+                android:clickable="true"
+                android:focusable="true"
+                app:tint="@color/primary"/>
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Crear cuenta"
+                android:textStyle="bold"
+                android:textSize="20sp"
+                android:textColor="@color/primary"
+                android:gravity="center"
+                android:layout_marginEnd="48dp"/>
+        </LinearLayout>
+
+        <!-- Logo -->
         <ImageView
             android:layout_width="100dp"
             android:layout_height="100dp"
@@ -21,19 +51,10 @@
             android:src="@mipmap/ic_launcher"
             android:contentDescription="App Logo" />
 
-        <!-- Título -->
         <TextView
-            style="@style/TextAppearance.Kcal.Heading"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="24dp"
-            android:gravity="center"
-            android:text="Crear cuenta"
-            android:textSize="28sp" />
-
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
             android:layout_marginBottom="32dp"
             android:gravity="center"
             android:text="Únete a Kcal y empieza a mejorar tu alimentación hoy mismo."
@@ -50,7 +71,11 @@
             app:boxStrokeColor="@color/primary"
             app:hintTextColor="@color/primary"
             app:startIconDrawable="@android:drawable/ic_dialog_email"
-            app:startIconTint="@color/primary">
+            app:startIconTint="@color/primary"
+            app:boxCornerRadiusBottomEnd="12dp"
+            app:boxCornerRadiusBottomStart="12dp"
+            app:boxCornerRadiusTopEnd="12dp"
+            app:boxCornerRadiusTopStart="12dp">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/emailRegister"
@@ -70,7 +95,11 @@
             app:hintTextColor="@color/primary"
             app:passwordToggleEnabled="true"
             app:startIconDrawable="@android:drawable/ic_lock_idle_lock"
-            app:startIconTint="@color/primary">
+            app:startIconTint="@color/primary"
+            app:boxCornerRadiusBottomEnd="12dp"
+            app:boxCornerRadiusBottomStart="12dp"
+            app:boxCornerRadiusTopEnd="12dp"
+            app:boxCornerRadiusTopStart="12dp">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/passwordRegister"
@@ -90,7 +119,11 @@
             app:hintTextColor="@color/primary"
             app:passwordToggleEnabled="true"
             app:startIconDrawable="@android:drawable/ic_lock_idle_lock"
-            app:startIconTint="@color/primary">
+            app:startIconTint="@color/primary"
+            app:boxCornerRadiusBottomEnd="12dp"
+            app:boxCornerRadiusBottomStart="12dp"
+            app:boxCornerRadiusTopEnd="12dp"
+            app:boxCornerRadiusTopStart="12dp">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/repeatPassword"

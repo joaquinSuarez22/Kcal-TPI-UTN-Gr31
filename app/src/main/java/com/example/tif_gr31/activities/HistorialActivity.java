@@ -75,8 +75,9 @@ public class HistorialActivity extends AppCompatActivity {
 
         String uid = mAuth.getCurrentUser().getUid();
 
+        // Se usa la colección dentro del documento del usuario
         db.collection("usuarios").document(uid).collection("comidas")
-                .orderBy("fecha", Query.Direction.DESCENDING)
+                .orderBy("timestamp", Query.Direction.DESCENDING)
                 .get()
                 .addOnSuccessListener(queryDocumentSnapshots -> {
                     listaComidas.clear();
@@ -119,7 +120,10 @@ public class HistorialActivity extends AppCompatActivity {
         public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
             Map<String, Object> comida = lista.get(position);
 
-            holder.tvTipo.setText((String) comida.get("categoria"));
+            // Mapeo corregido de nombres de campos según RegistrarComidaActivity
+            String tipo = (String) comida.get("tipo");
+            holder.tvTipo.setText(tipo != null ? tipo : "Comida");
+            
             holder.tvFecha.setText((String) comida.get("fecha"));
             
             List<Map<String, Object>> ingredientes = (List<Map<String, Object>>) comida.get("ingredientes");
@@ -134,15 +138,13 @@ public class HistorialActivity extends AppCompatActivity {
                 holder.tvDetalle.setText("Sin ingredientes detallados");
             }
 
-            double cals = comida.get("calorias") != null ? ((Number) comida.get("calorias")).doubleValue() : 0;
-            double p = comida.get("proteinas") != null ? ((Number) comida.get("proteinas")).doubleValue() : 0;
-            double g = comida.get("grasas") != null ? ((Number) comida.get("grasas")).doubleValue() : 0;
+            double cals = comida.get("totalKcal") != null ? ((Number) comida.get("totalKcal")).doubleValue() : 0;
+            double p = comida.get("totalProt") != null ? ((Number) comida.get("totalProt")).doubleValue() : 0;
+            double c = comida.get("totalCarb") != null ? ((Number) comida.get("totalCarb")).doubleValue() : 0;
+            double g = comida.get("totalGrasa") != null ? ((Number) comida.get("totalGrasa")).doubleValue() : 0;
 
             holder.tvCals.setText(String.format("%.0f kcal", cals));
-            // Fixed typo from previous read if any, though it looked okay. 
-            // wait, it was: Map<String, Object> doesn't guarantee type, so casting is safer.
-            double carbos = comida.get("carbohidratos") != null ? ((Number) comida.get("carbohidratos")).doubleValue() : 0;
-            holder.tvMacros.setText(String.format("P: %.1fg | C: %.1fg | G: %.1fg", p, carbos, g));
+            holder.tvMacros.setText(String.format("P: %.1fg | C: %.1fg | G: %.1fg", p, c, g));
         }
 
         @Override

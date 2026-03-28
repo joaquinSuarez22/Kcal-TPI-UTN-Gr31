@@ -50,7 +50,11 @@
             app:boxStrokeColor="@color/primary"
             app:hintTextColor="@color/primary"
             app:startIconDrawable="@android:drawable/ic_dialog_email"
-            app:startIconTint="@color/primary">
+            app:startIconTint="@color/primary"
+            app:boxCornerRadiusBottomEnd="12dp"
+            app:boxCornerRadiusBottomStart="12dp"
+            app:boxCornerRadiusTopEnd="12dp"
+            app:boxCornerRadiusTopStart="12dp">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/email"
@@ -70,7 +74,11 @@
             app:hintTextColor="@color/primary"
             app:passwordToggleEnabled="true"
             app:startIconDrawable="@android:drawable/ic_lock_idle_lock"
-            app:startIconTint="@color/primary">
+            app:startIconTint="@color/primary"
+            app:boxCornerRadiusBottomEnd="12dp"
+            app:boxCornerRadiusBottomStart="12dp"
+            app:boxCornerRadiusTopEnd="12dp"
+            app:boxCornerRadiusTopStart="12dp">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/password"

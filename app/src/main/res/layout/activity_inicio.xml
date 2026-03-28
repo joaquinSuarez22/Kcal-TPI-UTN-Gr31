@@ -17,7 +17,9 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:padding="20dp">
+            android:padding="20dp"
+            android:clipChildren="false"
+            android:clipToPadding="false">
 
             <!-- HEADER -->
             <LinearLayout
@@ -50,7 +52,8 @@
                     android:layout_height="wrap_content"
                     android:gravity="center_horizontal"
                     android:orientation="vertical"
-                    android:padding="18dp">
+                    android:padding="20dp"
+                    android:clipChildren="false">
 
                     <TextView
                         style="@style/TextAppearance.Kcal.SubHeading"
@@ -67,14 +70,15 @@
                         android:textSize="12sp" />
 
                     <FrameLayout
-                        android:layout_width="160dp"
-                        android:layout_height="160dp"
-                        android:layout_marginTop="20dp">
+                        android:layout_width="180dp"
+                        android:layout_height="180dp"
+                        android:layout_marginTop="20dp"
+                        android:clipChildren="false">
 
                         <com.google.android.material.progressindicator.CircularProgressIndicator
                             android:id="@+id/progresoCaloriasCircular"
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
                             android:layout_gravity="center"
                             app:indicatorColor="@color/primary"
                             app:indicatorSize="160dp"
@@ -133,7 +137,8 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
-                    android:padding="18dp">
+                    android:padding="20dp"
+                    android:clipChildren="false">
 
                     <TextView
                         style="@style/TextAppearance.Kcal.SubHeading"
@@ -146,7 +151,9 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="20dp"
-                        android:orientation="horizontal">
+                        android:orientation="horizontal"
+                        android:baselineAligned="false"
+                        android:clipChildren="false">
 
                         <!-- Carbohidratos -->
                         <LinearLayout
@@ -154,15 +161,18 @@
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
                             android:gravity="center"
-                            android:orientation="vertical">
+                            android:orientation="vertical"
+                            android:clipChildren="false">
 
                             <FrameLayout
-                                android:layout_width="70dp"
-                                android:layout_height="70dp">
+                                android:layout_width="90dp"
+                                android:layout_height="90dp"
+                                android:clipChildren="false">
                                 <com.google.android.material.progressindicator.CircularProgressIndicator
                                     android:id="@+id/progresoCarbos"
-                                    android:layout_width="match_parent"
-                                    android:layout_height="match_parent"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_gravity="center"
                                     app:indicatorColor="#FFA000"
                                     app:indicatorSize="70dp"
                                     app:trackColor="#F1F5F9"
@@ -192,15 +202,18 @@
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
                             android:gravity="center"
-                            android:orientation="vertical">
+                            android:orientation="vertical"
+                            android:clipChildren="false">
 
                             <FrameLayout
-                                android:layout_width="70dp"
-                                android:layout_height="70dp">
+                                android:layout_width="90dp"
+                                android:layout_height="90dp"
+                                android:clipChildren="false">
                                 <com.google.android.material.progressindicator.CircularProgressIndicator
                                     android:id="@+id/progresoProteinas"
-                                    android:layout_width="match_parent"
-                                    android:layout_height="match_parent"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_gravity="center"
                                     app:indicatorColor="#F44336"
                                     app:indicatorSize="70dp"
                                     app:trackColor="#F1F5F9"
@@ -230,15 +243,18 @@
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
                             android:gravity="center"
-                            android:orientation="vertical">
+                            android:orientation="vertical"
+                            android:clipChildren="false">
 
                             <FrameLayout
-                                android:layout_width="70dp"
-                                android:layout_height="70dp">
+                                android:layout_width="90dp"
+                                android:layout_height="90dp"
+                                android:clipChildren="false">
                                 <com.google.android.material.progressindicator.CircularProgressIndicator
                                     android:id="@+id/progresoGrasas"
-                                    android:layout_width="match_parent"
-                                    android:layout_height="match_parent"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_gravity="center"
                                     app:indicatorColor="#4CAF50"
                                     app:indicatorSize="70dp"
                                     app:trackColor="#F1F5F9"
@@ -295,6 +311,14 @@
             <!-- Snacks -->
             <include layout="@layout/item_comida_dashboard"
                 android:id="@+id/itemSnacks" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnDebug"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="30dp"
+                android:text="DEBUG: CARGAR COMIDAS"
+                app:backgroundTint="#FF9800" />
 
         </LinearLayout>
 

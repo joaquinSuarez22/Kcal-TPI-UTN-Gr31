@@ -3,6 +3,7 @@ package com.example.tif_gr31.activities;
 import android.os.Bundle;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
@@ -35,6 +36,7 @@ public class RecuperarActivityActivity extends AppCompatActivity {
         EditText txtEmail = findViewById(R.id.EmailRecuperar);
         Button btnVolver = findViewById(R.id.btnVolver);
         Button btnEnviar = findViewById(R.id.btnEnviar);
+        ImageView btnBackHeader = findViewById(R.id.btnBackHeader);
 
         btnEnviar.setOnClickListener(v -> {
             String email = txtEmail.getText().toString().trim();
@@ -61,5 +63,8 @@ public class RecuperarActivityActivity extends AppCompatActivity {
         });
 
         btnVolver.setOnClickListener(v -> finish());
+        if (btnBackHeader != null) {
+            btnBackHeader.setOnClickListener(v -> finish());
+        }
     }
 }
