@@ -27,7 +27,6 @@ public class LoginActivity extends AppCompatActivity {
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_login);
 
-        // Inicializar Firebase Auth
         mAuth = FirebaseAuth.getInstance();
 
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
@@ -36,14 +35,13 @@ public class LoginActivity extends AppCompatActivity {
             return insets;
         });
 
-        // Referencias a la UI
         EditText txtEmail = findViewById(R.id.email);
         EditText txtPassword = findViewById(R.id.password);
         Button BtnLogin = findViewById(R.id.loginBtn);
         Button BtnRegistrar = findViewById(R.id.BtnRegistrar);
         TextView forgotPassword = findViewById(R.id.forgotPassword);
 
-        // Evento para Iniciar Sesión
+        // Iniciar sesión
         BtnLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -51,18 +49,17 @@ public class LoginActivity extends AppCompatActivity {
                 String pass = txtPassword.getText().toString().trim();
 
                 if (email.isEmpty() || pass.isEmpty()) {
-                    Toast.makeText(LoginActivity.this, "Por favor, ingresa email y contraseña", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(LoginActivity.this, "Ingresa email y contraseña", Toast.LENGTH_SHORT).show();
                     return;
                 }
 
-                // Autenticación con Firebase
                 mAuth.signInWithEmailAndPassword(email, pass)
                         .addOnCompleteListener(task -> {
                             if (task.isSuccessful()) {
                                 Toast.makeText(LoginActivity.this, "¡Bienvenido!", Toast.LENGTH_SHORT).show();
                                 Intent intent = new Intent(LoginActivity.this, InicioActivity.class);
                                 startActivity(intent);
-                                finish(); // Cerramos login para no volver atrás
+                                finish();
                             } else {
                                 Toast.makeText(LoginActivity.this, "Error: " + task.getException().getMessage(), Toast.LENGTH_LONG).show();
                             }
@@ -70,23 +67,16 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
 
-        // Evento para ir a la pantalla de Registro
-        BtnRegistrar.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(LoginActivity.this, RegistroActivity.class);
-                startActivity(intent);
-
-            }
+        // Ir a Registro
+        BtnRegistrar.setOnClickListener(v -> {
+            Intent intent = new Intent(LoginActivity.this, RegistroActivity.class);
+            startActivity(intent);
         });
 
-        // Evento para recuperar contraseña
-        forgotPassword.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(LoginActivity.this, RecuperarActivityActivity.class);
-                startActivity(intent);
-            }
+        // Ir a Recuperar Contraseña
+        forgotPassword.setOnClickListener(v -> {
+            Intent intent = new Intent(LoginActivity.this, RecuperarActivityActivity.class);
+            startActivity(intent);
         });
     }
 }

@@ -14,6 +14,7 @@ import androidx.core.view.WindowInsetsCompat;
 
 import com.example.tif_gr31.R;
 import com.example.tif_gr31.utils.FloatingNavigationHelper;
+import com.google.android.material.button.MaterialButton;
 import com.google.android.material.progressindicator.CircularProgressIndicator;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -53,20 +54,36 @@ public class InicioActivity extends AppCompatActivity {
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_inicio);
 
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
-            Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
-            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
-            return insets;
-        });
+        View mainLayout = findViewById(R.id.main);
+        if (mainLayout != null) {
+            ViewCompat.setOnApplyWindowInsetsListener(mainLayout, (v, insets) -> {
+                Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
+                v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
+                return insets;
+            });
+        }
 
         mAuth = FirebaseAuth.getInstance();
         db = FirebaseFirestore.getInstance();
+
+        // Inicializar el mapa de consumo para evitar NPEs
+        for (String cat : categorias) {
+            consumoPorCategoria.put(cat, 0.0);
+        }
 
         vincularVistas();
         setupMealItems();
 
         // Configuración de Navegación Flotante
         FloatingNavigationHelper.setupFloatingNavigation(this, R.id.nav_inicio);
+
+        MaterialButton btnDebug = findViewById(R.id.btnDebug);
+        if (btnDebug != null) {
+            btnDebug.setOnClickListener(v -> {
+                Intent intent = new Intent(InicioActivity.this, DebugActivity.class);
+                startActivity(intent);
+            });
+        }
 
         cargarDatosResumen();
     }
@@ -92,16 +109,24 @@ public class InicioActivity extends AppCompatActivity {
 
     private void setupMealItems() {
         for (int i = 0; i < categorias.length; i++) {
-            String cat = categorias[i];
+            final String cat = categorias[i];
             View view = mealViews.get(cat);
             if (view != null) {
-                ((TextView)view.findViewById(R.id.txtComidaNombre)).setText(cat);
-                ((TextView)view.findViewById(R.id.imgComidaIcono)).setText(emojis[i]);
-                view.findViewById(R.id.btnAgregarComida).setOnClickListener(v -> {
-                    Intent intent = new Intent(this, RegistrarComidaActivity.class);
-                    intent.putExtra("CATEGORIA_SELECCIONADA", cat);
-                    startActivity(intent);
-                });
+                TextView tvNombre = view.findViewById(R.id.txtComidaNombre);
+                TextView tvIcono = view.findViewById(R.id.imgComidaIcono);
+                View btnAdd = view.findViewById(R.id.btnAgregarComida);
+
+                if (tvNombre != null) tvNombre.setText(cat);
+                if (tvIcono != null) tvIcono.setText(emojis[i]);
+                
+                if (btnAdd != null) {
+                    btnAdd.setOnClickListener(v -> {
+                        Log.d(TAG, "Click en añadir comida: " + cat);
+                        Intent intent = new Intent(InicioActivity.this, RegistrarComidaActivity.class);
+                        intent.putExtra("CATEGORIA_SELECCIONADA", cat);
+                        startActivity(intent);
+                    });
+                }
             }
         }
     }
@@ -117,7 +142,10 @@ public class InicioActivity extends AppCompatActivity {
                         if (perfilObj instanceof Map) {
                             Map<String, Object> perfil = (Map<String, Object>) perfilObj;
                             if (perfil.containsKey("calorias_estimadas")) {
-                                objetivoCaloricoTotal = ((Number) perfil.get("calorias_estimadas")).doubleValue();
+                                Object calsObj = perfil.get("calorias_estimadas");
+                                if (calsObj instanceof Number) {
+                                    objetivoCaloricoTotal = ((Number) calsObj).doubleValue();
+                                }
                             }
                         }
                         obtenerConsumoDelDia(user.getUid());
@@ -136,18 +164,20 @@ public class InicioActivity extends AppCompatActivity {
                 .addOnSuccessListener(queryDocumentSnapshots -> {
                     resetearTotales();
                     for (DocumentSnapshot doc : queryDocumentSnapshots) {
-                        calsConsumidas += doc.getDouble("calorias") != null ? doc.getDouble("calorias") : 0;
-                        carbosConsumidos += doc.getDouble("carbohidratos") != null ? doc.getDouble("carbohidratos") : 0;
-                        protConsumidas += doc.getDouble("proteinas") != null ? doc.getDouble("proteinas") : 0;
-                        grasasConsumidas += doc.getDouble("grasas") != null ? doc.getDouble("grasas") : 0;
+                        calsConsumidas += doc.getDouble("totalKcal") != null ? doc.getDouble("totalKcal") : 0;
+                        carbosConsumidos += doc.getDouble("totalCarb") != null ? doc.getDouble("totalCarb") : 0;
+                        protConsumidas += doc.getDouble("totalProt") != null ? doc.getDouble("totalProt") : 0;
+                        grasasConsumidas += doc.getDouble("totalGrasa") != null ? doc.getDouble("totalGrasa") : 0;
                         
-                        String cat = doc.getString("categoria");
+                        String cat = doc.getString("tipo");
                         if (cat != null && consumoPorCategoria.containsKey(cat)) {
-                            consumoPorCategoria.put(cat, consumoPorCategoria.get(cat) + (doc.getDouble("calorias") != null ? doc.getDouble("calorias") : 0));
+                            Double valorActual = consumoPorCategoria.get(cat);
+                            consumoPorCategoria.put(cat, (valorActual != null ? valorActual : 0) + (doc.getDouble("totalKcal") != null ? doc.getDouble("totalKcal") : 0));
                         }
                     }
                     actualizarUI();
-                });
+                })
+                .addOnFailureListener(e -> Log.e(TAG, "Error obteniendo comidas: ", e));
     }
 
     private void resetearTotales() {
@@ -157,10 +187,14 @@ public class InicioActivity extends AppCompatActivity {
 
     private void actualizarUI() {
         double restantes = Math.max(0, objetivoCaloricoTotal - calsConsumidas);
-        txtCaloriasRestantesCentro.setText(String.format(Locale.US, "%.0f", restantes));
-        txtObjetivoTotalCalorias.setText(String.format(Locale.US, "Objetivo: %.0f kcal", objetivoCaloricoTotal));
+        if (txtCaloriasRestantesCentro != null) {
+            txtCaloriasRestantesCentro.setText(String.format(Locale.US, "%.0f", restantes));
+        }
+        if (txtObjetivoTotalCalorias != null) {
+            txtObjetivoTotalCalorias.setText(String.format(Locale.US, "Objetivo: %.0f kcal", objetivoCaloricoTotal));
+        }
         
-        if (objetivoCaloricoTotal > 0) {
+        if (objetivoCaloricoTotal > 0 && progresoCaloriasCircular != null) {
             int progreso = (int) ((calsConsumidas / objetivoCaloricoTotal) * 100);
             progresoCaloriasCircular.setProgress(Math.min(progreso, 100));
         }
@@ -177,14 +211,18 @@ public class InicioActivity extends AppCompatActivity {
             double objCat = cat.equals("Snacks") ? objetivoCaloricoTotal * 0.1 : objetivoCaloricoTotal * 0.225;
             View v = mealViews.get(cat);
             if (v != null) {
-                ((TextView)v.findViewById(R.id.txtComidaCalorias)).setText(String.format(Locale.US, "%.0f / %.0f kcal", consumoPorCategoria.get(cat), objCat));
+                TextView tvCals = v.findViewById(R.id.txtComidaCalorias);
+                if (tvCals != null) {
+                    Double consumido = consumoPorCategoria.get(cat);
+                    tvCals.setText(String.format(Locale.US, "%.0f / %.0f kcal", (consumido != null ? consumido : 0), objCat));
+                }
             }
         }
     }
 
     private void actualizarMacroCircle(CircularProgressIndicator cp, TextView tv, double valor, double objetivo) {
-        tv.setText(String.format(Locale.US, "%.0fg", valor));
-        if (objetivo > 0) {
+        if (tv != null) tv.setText(String.format(Locale.US, "%.0fg", valor));
+        if (objetivo > 0 && cp != null) {
             int prog = (int) ((valor / objetivo) * 100);
             cp.setProgress(Math.min(prog, 100));
         }

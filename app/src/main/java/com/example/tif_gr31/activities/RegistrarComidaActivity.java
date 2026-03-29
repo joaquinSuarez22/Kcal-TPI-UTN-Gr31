@@ -97,8 +97,10 @@ public class RegistrarComidaActivity extends AppCompatActivity {
         configurarSpinner();
         configurarCampoGramos();
 
+        // Manejar la categoría preseleccionada desde el Dashboard
         manejarCategoriaPreseleccionada();
 
+        // Configuración de Navegación Flotante
         FloatingNavigationHelper.setupFloatingNavigation(this, -1);
 
         btnAgregarIngrediente.setOnClickListener(v -> agregarIngredienteALista());
@@ -279,6 +281,7 @@ public class RegistrarComidaActivity extends AppCompatActivity {
         actualizarResumenTotales();
         ingredientesAdapter.notifyDataSetChanged();
 
+        // Limpiar para el siguiente ingrediente
         alimentoActual = null;
         cardAlimentoSeleccionado.setVisibility(View.GONE);
         etBuscarAlimento.setText("");
@@ -303,18 +306,17 @@ public class RegistrarComidaActivity extends AppCompatActivity {
         String fechaHoy = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(new Date());
 
         Map<String, Object> comidaMap = new HashMap<>();
-        comidaMap.put("categoria", tipoComida); // Usar 'categoria' para consistencia con InicioActivity
+        comidaMap.put("userId", userId);
+        comidaMap.put("tipo", tipoComida);
         comidaMap.put("fecha", fechaHoy);
         comidaMap.put("timestamp", new Date());
-        comidaMap.put("calorias", totalKcal); // Usar 'calorias' para consistencia
-        comidaMap.put("proteinas", totalProt); // Usar 'proteinas' para consistencia
-        comidaMap.put("carbohidratos", totalCarb); // Usar 'carbohidratos' para consistencia
-        comidaMap.put("grasas", totalGrasa); // Usar 'grasas' para consistencia
+        comidaMap.put("totalKcal", totalKcal);
+        comidaMap.put("totalProt", totalProt);
+        comidaMap.put("totalCarb", totalCarb);
+        comidaMap.put("totalGrasa", totalGrasa);
         comidaMap.put("ingredientes", listaIngredientes);
 
-        // Guardar en la subcolección del usuario
-        db.collection("usuarios").document(userId).collection("comidas")
-                .add(comidaMap)
+        db.collection("comidas").add(comidaMap)
                 .addOnSuccessListener(documentReference -> {
                     Toast.makeText(this, "Comida guardada exitosamente", Toast.LENGTH_SHORT).show();
                     finish();

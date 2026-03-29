@@ -14,6 +14,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.TIF_Gr31">
         <activity
+            android:name=".activities.DebugActivity"
+            android:exported="false" />
+        <activity
             android:name=".activities.RecuperarActivityActivity"
             android:exported="false" />
         <activity
