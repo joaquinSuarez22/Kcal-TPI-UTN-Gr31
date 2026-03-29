@@ -57,6 +57,7 @@
             android:paddingVertical="8dp">
 
             <TextView
+                android:id="@+id/tvPeriodoDia"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="DÍA"
@@ -66,6 +67,7 @@
                 android:paddingVertical="8dp" />
 
             <TextView
+                android:id="@+id/tvPeriodoSemana"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="SEMANA"
@@ -75,6 +77,7 @@
                 android:paddingVertical="8dp" />
 
             <TextView
+                android:id="@+id/tvPeriodoMes"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="MES"
@@ -127,9 +130,10 @@
                             android:layout_marginTop="4dp">
 
                             <TextView
+                                android:id="@+id/tvCaloriasTotales"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="12,450"
+                                android:text="0"
                                 android:textSize="32sp"
                                 android:textStyle="bold"
                                 android:textColor="#0f172a" />
@@ -146,16 +150,18 @@
                         </LinearLayout>
 
                         <TextView
+                            android:id="@+id/tvComparativaPeriodo"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="+5% vs semana anterior"
-                            android:textColor="#22c55e"
+                            android:text="Cargando datos..."
+                            android:textColor="#64748b"
                             android:textSize="14sp"
                             android:textStyle="bold"
                             android:layout_marginTop="4dp" />
 
                         <!-- Placeholder for Bar Chart -->
                         <View
+                            android:id="@+id/chartPlaceholder"
                             android:layout_width="match_parent"
                             android:layout_height="120dp"
                             android:layout_marginTop="16dp"
@@ -193,14 +199,15 @@
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="PROMEDIO SEMANAL"
+                                android:text="PROMEDIO DIARIO"
                                 android:textSize="10sp"
                                 android:textStyle="bold"
                                 android:textColor="#64748b"/>
                             <TextView
+                                android:id="@+id/tvPromedioSemanal"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="1,780 kcal"
+                                android:text="0 kcal"
                                 android:textSize="18sp"
                                 android:textStyle="bold"
                                 android:textColor="#0f172a"
@@ -235,9 +242,10 @@
                                 android:textStyle="bold"
                                 android:textColor="#64748b"/>
                             <TextView
+                                android:id="@+id/tvDiasRegistrados"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="7 días"
+                                android:text="0 días"
                                 android:textSize="18sp"
                                 android:textStyle="bold"
                                 android:textColor="#0f172a"
@@ -285,19 +293,21 @@
                                 android:textStyle="bold"
                                 android:textColor="#3b82f6" />
                             <TextView
+                                android:id="@+id/tvPorcentajeProteinas"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="30%"
+                                android:text="0%"
                                 android:textSize="12sp"
                                 android:textStyle="bold"
                                 android:textColor="#475569" />
                         </LinearLayout>
                         <ProgressBar
+                            android:id="@+id/pbProteinas"
                             android:layout_width="match_parent"
                             android:layout_height="8dp"
                             style="?android:attr/progressBarStyleHorizontal"
                             android:progressTint="#3b82f6"
-                            android:progress="30"
+                            android:progress="0"
                             android:max="100"
                             android:layout_marginBottom="12dp"/>
 
@@ -316,19 +326,21 @@
                                 android:textStyle="bold"
                                 android:textColor="#eab308" />
                             <TextView
+                                android:id="@+id/tvPorcentajeCarbos"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="45%"
+                                android:text="0%"
                                 android:textSize="12sp"
                                 android:textStyle="bold"
                                 android:textColor="#475569" />
                         </LinearLayout>
                         <ProgressBar
+                            android:id="@+id/pbCarbos"
                             android:layout_width="match_parent"
                             android:layout_height="8dp"
                             style="?android:attr/progressBarStyleHorizontal"
                             android:progressTint="#eab308"
-                            android:progress="45"
+                            android:progress="0"
                             android:max="100"
                             android:layout_marginBottom="12dp"/>
 
@@ -347,19 +359,21 @@
                                 android:textStyle="bold"
                                 android:textColor="#ef4444" />
                             <TextView
+                                android:id="@+id/tvPorcentajeGrasas"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="25%"
+                                android:text="0%"
                                 android:textSize="12sp"
                                 android:textStyle="bold"
                                 android:textColor="#475569" />
                         </LinearLayout>
                         <ProgressBar
+                            android:id="@+id/pbGrasas"
                             android:layout_width="match_parent"
                             android:layout_height="8dp"
                             style="?android:attr/progressBarStyleHorizontal"
                             android:progressTint="#ef4444"
-                            android:progress="25"
+                            android:progress="0"
                             android:max="100"/>
 
                     </LinearLayout>
@@ -381,7 +395,7 @@
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Personalizado basado en tus registros de esta semana"
+                    android:text="Personalizado basado en tus registros"
                     android:textColor="#94a3b8"
                     android:textSize="12sp"
                     android:textAlignment="center"
@@ -392,7 +406,7 @@
         </ScrollView>
     </LinearLayout>
 
-    <!-- Barra de navegación flotante (píldora) -->
+    <!-- Barra de navegación flotante -->
     <include layout="@layout/floating_bottom_nav" />
 
 </FrameLayout>
