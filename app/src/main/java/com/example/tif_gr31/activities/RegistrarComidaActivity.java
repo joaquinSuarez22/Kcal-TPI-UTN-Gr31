@@ -47,6 +47,9 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
+import com.google.android.material.card.MaterialCardView;
+
+
 public class RegistrarComidaActivity extends AppCompatActivity {
 
     private static final String USDA_API_KEY = "BpuqGxfs81r5NeHjS2pe7fdWV2fRJY5vKd59lgnI";
@@ -55,7 +58,7 @@ public class RegistrarComidaActivity extends AppCompatActivity {
     private EditText etBuscarAlimento, etGramos;
     private ImageView btnLimpiarBusqueda;
     private RecyclerView rvResultadosBusqueda, rvIngredientesAgregados;
-    private LinearLayout cardAlimentoSeleccionado;
+    private MaterialCardView cardAlimentoSeleccionado;
     private TextView tvNombreAlimentoSeleccionado, tvTotalCalorias, tvTotalMacros;
     private TextView tvCaloriasCalculadas, tvProteinasCalculadas, tvCarbosCalculados, tvGrasasCalculadas;
     private Spinner spinnerTipoComida;
@@ -68,7 +71,7 @@ public class RegistrarComidaActivity extends AppCompatActivity {
     private final List<Map<String, Object>> listaIngredientes = new ArrayList<>();
     private ResultadosAdapter resultadosAdapter;
     private IngredientesAdapter ingredientesAdapter;
-    
+
     private FoodProduct alimentoActual;
     private double totalKcal = 0, totalProt = 0, totalCarb = 0, totalGrasa = 0;
 
@@ -78,7 +81,7 @@ public class RegistrarComidaActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        
+
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_registrar_comida);
 
@@ -97,10 +100,8 @@ public class RegistrarComidaActivity extends AppCompatActivity {
         configurarSpinner();
         configurarCampoGramos();
 
-        // Manejar la categoría preseleccionada desde el Dashboard
         manejarCategoriaPreseleccionada();
 
-        // Configuración de Navegación Flotante
         FloatingNavigationHelper.setupFloatingNavigation(this, -1);
 
         btnAgregarIngrediente.setOnClickListener(v -> agregarIngredienteALista());
@@ -257,7 +258,7 @@ public class RegistrarComidaActivity extends AppCompatActivity {
 
         double gramos = Double.parseDouble(gramosStr);
         double factor = gramos / 100.0;
-        
+
         double kcalFinal = alimentoActual.getKcal() * factor;
         double protFinal = alimentoActual.getProteinas() * factor;
         double carbFinal = alimentoActual.getCarbohidratos() * factor;
@@ -272,7 +273,7 @@ public class RegistrarComidaActivity extends AppCompatActivity {
         ingrediente.put("grasas", grasaFinal);
 
         listaIngredientes.add(ingrediente);
-        
+
         totalKcal += kcalFinal;
         totalProt += protFinal;
         totalCarb += carbFinal;
@@ -281,7 +282,6 @@ public class RegistrarComidaActivity extends AppCompatActivity {
         actualizarResumenTotales();
         ingredientesAdapter.notifyDataSetChanged();
 
-        // Limpiar para el siguiente ingrediente
         alimentoActual = null;
         cardAlimentoSeleccionado.setVisibility(View.GONE);
         etBuscarAlimento.setText("");
@@ -306,17 +306,18 @@ public class RegistrarComidaActivity extends AppCompatActivity {
         String fechaHoy = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(new Date());
 
         Map<String, Object> comidaMap = new HashMap<>();
-        comidaMap.put("userId", userId);
-        comidaMap.put("tipo", tipoComida);
+        comidaMap.put("categoria", tipoComida); // Usar 'categoria' para consistencia con InicioActivity
         comidaMap.put("fecha", fechaHoy);
         comidaMap.put("timestamp", new Date());
-        comidaMap.put("totalKcal", totalKcal);
-        comidaMap.put("totalProt", totalProt);
-        comidaMap.put("totalCarb", totalCarb);
-        comidaMap.put("totalGrasa", totalGrasa);
+        comidaMap.put("calorias", totalKcal); // Usar 'calorias' para consistencia
+        comidaMap.put("proteinas", totalProt); // Usar 'proteinas' para consistencia
+        comidaMap.put("carbohidratos", totalCarb); // Usar 'carbohidratos' para consistencia
+        comidaMap.put("grasas", totalGrasa); // Usar 'grasas' para consistencia
         comidaMap.put("ingredientes", listaIngredientes);
 
-        db.collection("comidas").add(comidaMap)
+        // Guardar en la subcolección del usuario
+        db.collection("usuarios").document(userId).collection("comidas")
+                .add(comidaMap)
                 .addOnSuccessListener(documentReference -> {
                     Toast.makeText(this, "Comida guardada exitosamente", Toast.LENGTH_SHORT).show();
                     finish();
@@ -377,7 +378,7 @@ public class RegistrarComidaActivity extends AppCompatActivity {
         public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
             Map<String, Object> item = items.get(position);
             holder.t1.setText(String.format("%s (%.0fg)", item.get("nombre"), (Double) item.get("gramos")));
-            holder.t2.setText(String.format(Locale.getDefault(), "%.1f kcal | P: %.1fg | C: %.1fg | G: %.1fg", 
+            holder.t2.setText(String.format(Locale.getDefault(), "%.1f kcal | P: %.1fg | C: %.1fg | G: %.1fg",
                     (Double) item.get("kcal"), (Double) item.get("prot"), (Double) item.get("carb"), (Double) item.get("grasas")));
         }
 

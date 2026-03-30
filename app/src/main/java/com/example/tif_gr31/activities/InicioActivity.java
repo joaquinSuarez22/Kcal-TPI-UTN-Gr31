@@ -66,7 +66,6 @@ public class InicioActivity extends AppCompatActivity {
         mAuth = FirebaseAuth.getInstance();
         db = FirebaseFirestore.getInstance();
 
-        // Inicializar el mapa de consumo para evitar NPEs
         for (String cat : categorias) {
             consumoPorCategoria.put(cat, 0.0);
         }
@@ -120,8 +119,8 @@ public class InicioActivity extends AppCompatActivity {
                 if (tvIcono != null) tvIcono.setText(emojis[i]);
                 
                 if (btnAdd != null) {
+                    // CONFIGURADO: El botón "+" redirige a RegistrarComidaActivity con la categoría
                     btnAdd.setOnClickListener(v -> {
-                        Log.d(TAG, "Click en añadir comida: " + cat);
                         Intent intent = new Intent(InicioActivity.this, RegistrarComidaActivity.class);
                         intent.putExtra("CATEGORIA_SELECCIONADA", cat);
                         startActivity(intent);
@@ -164,15 +163,15 @@ public class InicioActivity extends AppCompatActivity {
                 .addOnSuccessListener(queryDocumentSnapshots -> {
                     resetearTotales();
                     for (DocumentSnapshot doc : queryDocumentSnapshots) {
-                        calsConsumidas += doc.getDouble("totalKcal") != null ? doc.getDouble("totalKcal") : 0;
-                        carbosConsumidos += doc.getDouble("totalCarb") != null ? doc.getDouble("totalCarb") : 0;
-                        protConsumidas += doc.getDouble("totalProt") != null ? doc.getDouble("totalProt") : 0;
-                        grasasConsumidas += doc.getDouble("totalGrasa") != null ? doc.getDouble("totalGrasa") : 0;
+                        calsConsumidas += doc.getDouble("calorias") != null ? doc.getDouble("calorias") : 0;
+                        carbosConsumidos += doc.getDouble("carbohidratos") != null ? doc.getDouble("carbohidratos") : 0;
+                        protConsumidas += doc.getDouble("proteinas") != null ? doc.getDouble("proteinas") : 0;
+                        grasasConsumidas += doc.getDouble("grasas") != null ? doc.getDouble("grasas") : 0;
                         
-                        String cat = doc.getString("tipo");
+                        String cat = doc.getString("categoria");
                         if (cat != null && consumoPorCategoria.containsKey(cat)) {
                             Double valorActual = consumoPorCategoria.get(cat);
-                            consumoPorCategoria.put(cat, (valorActual != null ? valorActual : 0) + (doc.getDouble("totalKcal") != null ? doc.getDouble("totalKcal") : 0));
+                            consumoPorCategoria.put(cat, (valorActual != null ? valorActual : 0) + (doc.getDouble("calorias") != null ? doc.getDouble("calorias") : 0));
                         }
                     }
                     actualizarUI();

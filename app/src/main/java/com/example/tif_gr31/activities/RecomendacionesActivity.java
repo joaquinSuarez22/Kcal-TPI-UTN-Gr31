@@ -100,7 +100,8 @@ public class RecomendacionesActivity extends AppCompatActivity {
                     caloriasPorDia.clear();
                     for (DocumentSnapshot doc : queryDocumentSnapshots) {
                         String fecha = doc.getString("fecha");
-                        double kcal = doc.getDouble("totalKcal") != null ? doc.getDouble("totalKcal") : 0;
+                        // Corregido: 'totalKcal' -> 'calorias' para consistencia con RegistrarComidaActivity
+                        double kcal = doc.getDouble("calorias") != null ? doc.getDouble("calorias") : 0;
                         
                         if (fecha != null) {
                             Double actual = caloriasPorDia.get(fecha);

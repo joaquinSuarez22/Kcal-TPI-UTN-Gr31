@@ -46,11 +46,14 @@ public class HistorialActivity extends AppCompatActivity {
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_historial);
 
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
-            Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
-            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
-            return insets;
-        });
+        View mainLayout = findViewById(R.id.main);
+        if (mainLayout != null) {
+            ViewCompat.setOnApplyWindowInsetsListener(mainLayout, (v, insets) -> {
+                Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
+                v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
+                return insets;
+            });
+        }
 
         db = FirebaseFirestore.getInstance();
         mAuth = FirebaseAuth.getInstance();
@@ -66,7 +69,12 @@ public class HistorialActivity extends AppCompatActivity {
 
         // Configuración de Navegación Flotante
         FloatingNavigationHelper.setupFloatingNavigation(this, R.id.nav_historial);
+    }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        // Cargamos los datos en onResume para que se actualice al volver de registrar una comida
         cargarHistorial();
     }
 
@@ -76,8 +84,10 @@ public class HistorialActivity extends AppCompatActivity {
         String uid = mAuth.getCurrentUser().getUid();
 
         // Se usa la colección dentro del documento del usuario
+        // Se quitó el orderBy("timestamp") temporalmente para asegurar que se vean todos los registros
+        // incluso si falta el campo timestamp en documentos viejos.
         db.collection("usuarios").document(uid).collection("comidas")
-                .orderBy("timestamp", Query.Direction.DESCENDING)
+                .orderBy("fecha", Query.Direction.DESCENDING)
                 .get()
                 .addOnSuccessListener(queryDocumentSnapshots -> {
                     listaComidas.clear();
@@ -121,8 +131,8 @@ public class HistorialActivity extends AppCompatActivity {
             Map<String, Object> comida = lista.get(position);
 
             // Mapeo corregido de nombres de campos según RegistrarComidaActivity
-            String tipo = (String) comida.get("tipo");
-            holder.tvTipo.setText(tipo != null ? tipo : "Comida");
+            String categoria = (String) comida.get("categoria");
+            holder.tvTipo.setText(categoria != null ? categoria : "Comida");
             
             holder.tvFecha.setText((String) comida.get("fecha"));
             
@@ -138,10 +148,11 @@ public class HistorialActivity extends AppCompatActivity {
                 holder.tvDetalle.setText("Sin ingredientes detallados");
             }
 
-            double cals = comida.get("totalKcal") != null ? ((Number) comida.get("totalKcal")).doubleValue() : 0;
-            double p = comida.get("totalProt") != null ? ((Number) comida.get("totalProt")).doubleValue() : 0;
-            double c = comida.get("totalCarb") != null ? ((Number) comida.get("totalCarb")).doubleValue() : 0;
-            double g = comida.get("totalGrasa") != null ? ((Number) comida.get("totalGrasa")).doubleValue() : 0;
+            // Se corrigieron los nombres de los campos para que coincidan con RegistrarComidaActivity
+            double cals = comida.get("calorias") != null ? ((Number) comida.get("calorias")).doubleValue() : 0;
+            double p = comida.get("proteinas") != null ? ((Number) comida.get("proteinas")).doubleValue() : 0;
+            double c = comida.get("carbohidratos") != null ? ((Number) comida.get("carbohidratos")).doubleValue() : 0;
+            double g = comida.get("grasas") != null ? ((Number) comida.get("grasas")).doubleValue() : 0;
 
             holder.tvCals.setText(String.format("%.0f kcal", cals));
             holder.tvMacros.setText(String.format("P: %.1fg | C: %.1fg | G: %.1fg", p, c, g));
