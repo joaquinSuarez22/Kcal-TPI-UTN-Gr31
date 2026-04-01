@@ -1,4 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!--
+    Layout de utilidad para la barra de navegación flotante personalizada.
+    Este archivo se incluye (mediante <include>) en todas las actividades principales.
+    Diseñado como una 'píldora' con elevación y bordes redondeados que flota
+    en la parte inferior de la pantalla.
+-->
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/floating_nav_container"
     android:layout_width="match_parent"
@@ -9,7 +15,7 @@
     android:paddingLeft="24dp"
     android:paddingRight="24dp">
 
-    <!-- Píldora redondeada con fondo blanco por defecto -->
+    <!-- Contenedor principal de la navegación (estilo píldora) -->
     <LinearLayout
         android:id="@+id/nav_pill"
         android:layout_width="match_parent"
@@ -19,7 +25,7 @@
         android:gravity="center"
         android:elevation="8dp">
 
-        <!-- Botón Inicio -->
+        <!-- Botón: Inicio -->
         <LinearLayout
             android:id="@+id/nav_inicio"
             android:layout_width="0dp"
@@ -50,7 +56,7 @@
                 android:textAllCaps="true" />
         </LinearLayout>
 
-        <!-- Botón Historial -->
+        <!-- Botón: Historial -->
         <LinearLayout
             android:id="@+id/nav_historial"
             android:layout_width="0dp"
@@ -81,7 +87,7 @@
                 android:textAllCaps="true" />
         </LinearLayout>
 
-        <!-- Botón Estadísticas -->
+        <!-- Botón: Estadísticas -->
         <LinearLayout
             android:id="@+id/nav_estadisticas"
             android:layout_width="0dp"
@@ -112,7 +118,7 @@
                 android:textAllCaps="true" />
         </LinearLayout>
 
-        <!-- Botón Perfil -->
+        <!-- Botón: Perfil -->
         <LinearLayout
             android:id="@+id/nav_perfil"
             android:layout_width="0dp"

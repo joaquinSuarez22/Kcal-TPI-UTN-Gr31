@@ -25,8 +25,14 @@ import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
 
+/**
+ * Actividad para la gestión del perfil del usuario.
+ * Permite ver y editar datos personales (peso, altura, edad, etc.) 
+ * y calcula automáticamente el objetivo calórico diario basándose en la fórmula de Harris-Benedict.
+ */
 public class PerfilActivity extends AppCompatActivity {
 
+    // Opciones estáticas para los selectores (Spinners)
     private static final String[] SEXO_OPCIONES = {"Masculino", "Femenino", "Otro"};
     private static final String[] ACTIVIDAD_OPCIONES = {
             "Sedentario (poco o nada de ejercicio)",
@@ -49,9 +55,11 @@ public class PerfilActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         
+        // Habilita diseño de pantalla completa
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_perfil);
 
+        // Ajuste de márgenes para las barras del sistema
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
@@ -64,15 +72,18 @@ public class PerfilActivity extends AppCompatActivity {
         vincularVistas();
         configurarSpinners();
         
-        // Configuración de Navegación Flotante
+        // Configuración de la barra de navegación inferior
         FloatingNavigationHelper.setupFloatingNavigation(this, R.id.nav_perfil);
 
+        // Carga los datos actuales del usuario desde Firestore
         cargarDatosPerfil();
 
+        // Configuración de listeners de botones
         btnGuardarPerfil.setOnClickListener(v -> guardarPerfil());
         btnVolverInicio.setOnClickListener(v -> finish());
         findViewById(R.id.btnBack).setOnClickListener(v -> finish());
 
+        // Redirige a la pantalla de confirmación de cierre de sesión
         btnIrCerrarSesion.setOnClickListener(v -> {
             Intent intent = new Intent(PerfilActivity.this, CerrarSesionActivity.class);
             startActivity(intent);
@@ -93,6 +104,9 @@ public class PerfilActivity extends AppCompatActivity {
         btnIrCerrarSesion = findViewById(R.id.btnIrCerrarSesion);
     }
 
+    /**
+     * Inicializa los Spinners con sus respectivos adaptadores y opciones.
+     */
     private void configurarSpinners() {
         configurarAdapter(spinnerSexo, SEXO_OPCIONES);
         configurarAdapter(spinnerActividad, ACTIVIDAD_OPCIONES);
@@ -105,6 +119,10 @@ public class PerfilActivity extends AppCompatActivity {
         spinner.setAdapter(adapter);
     }
 
+    /**
+     * Recupera la información del usuario desde la colección "usuarios" en Firestore.
+     * Rellena los campos de la interfaz con los valores almacenados.
+     */
     private void cargarDatosPerfil() {
         if (mAuth.getCurrentUser() == null) return;
         
@@ -120,6 +138,7 @@ public class PerfilActivity extends AppCompatActivity {
                             if (perfil.get("peso") != null) etPeso.setText(String.valueOf(perfil.get("peso")));
                             if (perfil.get("altura") != null) etAltura.setText(String.valueOf(perfil.get("altura")));
                             
+                            // Selecciona automáticamente la opción correcta en los spinners
                             seleccionarOpcionSpinner(spinnerSexo, perfil.get("sexo"), SEXO_OPCIONES);
                             seleccionarOpcionSpinner(spinnerActividad, perfil.get("nivelActividad"), ACTIVIDAD_OPCIONES);
                             seleccionarOpcionSpinner(spinnerObjetivo, perfil.get("objetivo"), OBJETIVO_OPCIONES);
@@ -135,6 +154,9 @@ public class PerfilActivity extends AppCompatActivity {
                 });
     }
 
+    /**
+     * Busca la posición de un valor en un array de opciones y lo selecciona en el Spinner.
+     */
     private void seleccionarOpcionSpinner(Spinner spinner, Object valor, String[] opciones) {
         if (valor == null) return;
         String valStr = String.valueOf(valor);
@@ -144,9 +166,14 @@ public class PerfilActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * Recopila los datos de la interfaz, realiza el cálculo de requerimientos calóricos
+     * y actualiza el documento del usuario en Firestore.
+     */
     private void guardarPerfil() {
         if (mAuth.getCurrentUser() == null) return;
 
+        // Validación de campos vacíos
         String nombre = etNombre.getText().toString().trim();
         String edadStr = etEdad.getText().toString().trim();
         String pesoStr = etPeso.getText().toString().trim();
@@ -164,7 +191,8 @@ public class PerfilActivity extends AppCompatActivity {
         String actividad = spinnerActividad.getSelectedItem().toString();
         String objetivo = spinnerObjetivo.getSelectedItem().toString();
 
-        // Cálculo básico de TMB (Harris-Benedict)
+        // --- CÁLCULO DE CALORÍAS ---
+        // 1. Tasa Metabólica Basal (Harris-Benedict corregida)
         double tmb;
         if (sexo.equals("Masculino")) {
             tmb = 88.362 + (13.397 * peso) + (4.799 * altura) - (5.677 * edad);
@@ -172,8 +200,8 @@ public class PerfilActivity extends AppCompatActivity {
             tmb = 447.593 + (9.247 * peso) + (3.098 * altura) - (4.330 * edad);
         }
 
-        // Factor de actividad
-        double factor = 1.2;
+        // 2. Ajuste por Factor de Actividad Física
+        double factor = 1.2; // Sedentario por defecto
         if (actividad.contains("Ligero")) factor = 1.375;
         else if (actividad.contains("Moderado")) factor = 1.55;
         else if (actividad.contains("Intenso")) factor = 1.725;
@@ -181,11 +209,13 @@ public class PerfilActivity extends AppCompatActivity {
 
         double caloriasCalculadas = tmb * factor;
 
+        // 3. Ajuste por Objetivo Personal (Déficit o Superávit)
         if (objetivo.equals("Perder peso")) caloriasCalculadas -= 500;
         else if (objetivo.equals("Ganar músculo")) caloriasCalculadas += 500;
 
         final double caloriasFinales = caloriasCalculadas;
 
+        // Creación del mapa de datos para Firestore
         Map<String, Object> perfil = new HashMap<>();
         perfil.put("edad", edad);
         perfil.put("peso", peso);
@@ -199,12 +229,13 @@ public class PerfilActivity extends AppCompatActivity {
         updates.put("nombre", nombre);
         updates.put("perfil", perfil);
 
+        // Envío de la actualización a Firestore
         db.collection("usuarios").document(mAuth.getCurrentUser().getUid())
                 .update(updates)
                 .addOnSuccessListener(aVoid -> {
                     Toast.makeText(this, "Perfil guardado correctamente", Toast.LENGTH_SHORT).show();
                     tvCaloriasFinales.setText(String.format(Locale.getDefault(), "Tu objetivo diario: %.0f kcal", caloriasFinales));
                 })
-                .addOnFailureListener(e -> Toast.makeText(this, "Error al guardar", Toast.LENGTH_SHORT).show());
+                .addOnFailureListener(e -> Toast.makeText(this, "Error al guardar el perfil", Toast.LENGTH_SHORT).show());
     }
 }

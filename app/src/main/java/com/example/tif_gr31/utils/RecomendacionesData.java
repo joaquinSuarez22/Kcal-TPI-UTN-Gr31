@@ -4,7 +4,8 @@ import com.example.tif_gr31.models.Recomendacion;
 import java.util.ArrayList;
 import java.util.List;
 
-public class RecomendacionesData {
+public class
+RecomendacionesData {
     public static List<Recomendacion> getRecomendaciones() {
         List<Recomendacion> lista = new ArrayList<>();
         

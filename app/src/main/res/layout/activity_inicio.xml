@@ -1,4 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!--
+    Layout para la pantalla principal (Dashboard).
+    Utiliza una estructura de capas (FrameLayout) para posicionar la navegación flotante
+    sobre el contenido principal que es desplazable (ScrollView).
+    Se divide en secciones: Resumen Calórico central, Macronutrientes y Lista de Comidas.
+-->
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/main"
@@ -6,7 +12,7 @@
     android:layout_height="match_parent"
     android:background="@color/background_light">
 
-    <!-- CONTENIDO -->
+    <!-- CONTENIDO PRINCIPAL DESPLAZABLE -->
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -21,7 +27,7 @@
             android:clipChildren="false"
             android:clipToPadding="false">
 
-            <!-- HEADER -->
+            <!-- HEADER / LOGO -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -38,7 +44,9 @@
             </LinearLayout>
 
 
-            <!-- SECCIÓN 1: CALORÍAS -->
+            <!-- SECCIÓN 1: RESUMEN DE CALORÍAS
+                 Muestra un indicador circular con las calorías restantes del día.
+            -->
             <com.google.android.material.card.MaterialCardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -124,7 +132,9 @@
                 </LinearLayout>
             </com.google.android.material.card.MaterialCardView>
 
-            <!-- SECCIÓN 2: MACRONUTRIENTES -->
+            <!-- SECCIÓN 2: DISTRIBUCIÓN DE MACRONUTRIENTES
+                 Desglose visual de Carbohidratos, Proteínas y Grasas en indicadores circulares pequeños.
+            -->
             <com.google.android.material.card.MaterialCardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -283,7 +293,10 @@
                 </LinearLayout>
             </com.google.android.material.card.MaterialCardView>
 
-            <!-- SECCIÓN COMIDAS -->
+            <!-- SECCIÓN 3: LISTADO DE COMIDAS POR CATEGORÍA
+                 Utiliza el tag 'include' para reutilizar el layout item_comida_dashboard.xml
+                 para cada una de las categorías de comida.
+            -->
             <TextView
                 style="@style/TextAppearance.Kcal.SubHeading"
                 android:layout_width="wrap_content"
@@ -292,26 +305,23 @@
                 android:text="Comidas de hoy"
                 android:textSize="18sp" />
 
-            <!-- Desayuno -->
+            <!-- Cada include representa una tarjeta interactiva en el Dashboard -->
             <include layout="@layout/item_comida_dashboard"
                 android:id="@+id/itemDesayuno" />
 
-            <!-- Almuerzo -->
             <include layout="@layout/item_comida_dashboard"
                 android:id="@+id/itemAlmuerzo" />
 
-            <!-- Merienda -->
             <include layout="@layout/item_comida_dashboard"
                 android:id="@+id/itemMerienda" />
 
-            <!-- Cena -->
             <include layout="@layout/item_comida_dashboard"
                 android:id="@+id/itemCena" />
 
-            <!-- Snacks -->
             <include layout="@layout/item_comida_dashboard"
                 android:id="@+id/itemSnacks" />
 
+            <!-- Botón de utilidad para desarrolladores -->
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/btnDebug"
                 android:layout_width="match_parent"
@@ -324,7 +334,9 @@
 
     </ScrollView>
 
-    <!-- Barra de navegación flotante (píldora) -->
+    <!-- BARRA DE NAVEGACIÓN FLOTANTE (PÍLDORA)
+         Se posiciona sobre el ScrollView gracias al FrameLayout padre.
+    -->
     <include layout="@layout/floating_bottom_nav" />
 
 </FrameLayout>

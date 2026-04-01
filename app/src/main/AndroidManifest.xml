@@ -1,7 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!--
+    Archivo de Manifiesto de Android.
+    Define la configuración fundamental de la aplicación, incluyendo:
+    - Permisos requeridos (Internet).
+    - Componentes de la aplicación (Actividades).
+    - Temas visuales e iconos.
+-->
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
 
+    <!-- Permiso necesario para conectar con la API de USDA y Firebase -->
     <uses-permission android:name="android.permission.INTERNET" />
 
     <application
@@ -13,49 +21,74 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.TIF_Gr31">
+
+        <!-- Actividades de la aplicación -->
+
+        <!-- Herramientas de desarrollo -->
         <activity
             android:name=".activities.DebugActivity"
             android:exported="false" />
+
+        <!-- Flujo de recuperación de acceso -->
         <activity
             android:name=".activities.RecuperarActivityActivity"
             android:exported="false" />
+
+        <!-- Confirmación de cierre de sesión -->
         <activity
             android:name=".activities.CerrarSesionActivity"
             android:exported="false" />
+
+        <!-- Sistema de recomendaciones -->
         <activity
             android:name=".activities.RecomendacionesActivity"
             android:exported="false" />
+
+        <!-- Pantalla de análisis de datos -->
         <activity
             android:name=".activities.EstadisticasActivity"
             android:exported="false" />
+
+        <!-- Listado de registros anteriores -->
         <activity
             android:name=".activities.HistorialActivity"
             android:exported="false" />
+
+        <!-- Buscador y registro de alimentos -->
         <activity
             android:name=".activities.RegistrarComidaActivity"
             android:exported="false" />
+
+        <!-- Configuración de perfil y objetivos -->
         <activity
             android:name=".activities.PerfilActivity"
             android:exported="false" />
+
+        <!-- Dashboard principal -->
         <activity
             android:name=".activities.InicioActivity"
             android:exported="false" />
+
+        <!-- Creación de nuevas cuentas -->
         <activity
             android:name=".activities.RegistroActivity"
             android:exported="false" />
+
+        <!-- Pantalla de acceso (Punto de entrada principal configurado actualmente) -->
         <activity
             android:name=".activities.LoginActivity"
             android:exported="true">
-                <intent-filter>
-                    <action android:name="android.intent.action.MAIN" />
-
-                    <category android:name="android.intent.category.LAUNCHER" />
-                </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
         </activity>
+
+        <!-- Actividad de enrutamiento (Splash Logic) -->
         <activity
             android:name=".activities.MainActivity"
-            android:exported="false">
-        </activity>
+            android:exported="false" />
+
     </application>
 
 </manifest>

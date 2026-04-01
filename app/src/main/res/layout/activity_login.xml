@@ -1,4 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!--
+    Layout para la pantalla de inicio de sesión (Login).
+    Utiliza un ScrollView para asegurar que el contenido sea accesible en pantallas pequeñas
+    o cuando se despliega el teclado.
+    Incluye campos de entrada estilizados con TextInputLayout para email y contraseña,
+    y botones para acceder al registro o recuperación de cuenta.
+-->
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/main"
@@ -12,7 +19,7 @@
         android:orientation="vertical"
         android:padding="24dp">
 
-        <!-- Logo/Header Space -->
+        <!-- Logo de la aplicación -->
         <ImageView
             android:layout_width="100dp"
             android:layout_height="100dp"
@@ -21,7 +28,7 @@
             android:src="@mipmap/ic_launcher"
             android:contentDescription="App Logo" />
 
-        <!-- Título -->
+        <!-- Encabezado de bienvenida -->
         <TextView
             style="@style/TextAppearance.Kcal.Heading"
             android:layout_width="match_parent"
@@ -40,7 +47,7 @@
             android:textColor="#475569"
             android:textSize="16sp" />
 
-        <!-- Email -->
+        <!-- Campo de entrada para el correo electrónico -->
         <com.google.android.material.textfield.TextInputLayout
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
             android:layout_width="match_parent"
@@ -63,7 +70,7 @@
                 android:inputType="textEmailAddress" />
         </com.google.android.material.textfield.TextInputLayout>
 
-        <!-- Password -->
+        <!-- Campo de entrada para la contraseña con opción de visualización -->
         <com.google.android.material.textfield.TextInputLayout
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
             android:layout_width="match_parent"
@@ -87,7 +94,7 @@
                 android:inputType="textPassword" />
         </com.google.android.material.textfield.TextInputLayout>
 
-        <!-- Olvidé contraseña -->
+        <!-- Enlace para recuperar contraseña -->
         <TextView
             android:id="@+id/forgotPassword"
             android:layout_width="wrap_content"
@@ -100,7 +107,7 @@
             android:clickable="true"
             android:focusable="true"/>
 
-        <!-- Botón login -->
+        <!-- Botón principal de acceso -->
         <com.google.android.material.button.MaterialButton
             android:id="@+id/loginBtn"
             android:layout_width="match_parent"
@@ -113,7 +120,7 @@
             android:textStyle="bold"
             app:cornerRadius="12dp" />
 
-        <!-- Registro -->
+        <!-- Sección para redirigir al registro -->
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

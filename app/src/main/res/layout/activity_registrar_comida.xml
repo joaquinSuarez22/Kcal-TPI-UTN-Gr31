@@ -1,4 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!--
+    Layout para la pantalla de Registro de Comida.
+    Permite al usuario buscar alimentos, calcular macros según el peso y
+    consolidar una comida completa con múltiples ingredientes.
+    Estructura:
+    1. Buscador con resultados filtrados (RecyclerView).
+    2. Calculadora dinámica para el alimento seleccionado.
+    3. Lista de ingredientes agregados a la comida actual.
+    4. Resumen total y guardado final.
+-->
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
@@ -13,7 +23,7 @@
         android:layout_height="match_parent"
         android:orientation="vertical">
 
-        <!-- HEADER -->
+        <!-- Encabezado con navegación -->
         <LinearLayout
             android:id="@+id/headerLayout"
             android:layout_width="match_parent"
@@ -69,7 +79,7 @@
                 android:orientation="vertical"
                 android:padding="16dp">
 
-                <!-- BUSCADOR -->
+                <!-- Sección: Buscador de alimentos -->
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -110,6 +120,7 @@
                         android:visibility="gone" />
                 </LinearLayout>
 
+                <!-- Resultados inmediatos de la búsqueda -->
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/rvResultadosBusqueda"
                     android:layout_width="match_parent"
@@ -118,7 +129,7 @@
                     android:background="#F8FAFC"
                     android:visibility="gone" />
 
-                <!-- TARJETA DE ALIMENTO SELECCIONADO Y CALCULADORA -->
+                <!-- Calculadora de nutrientes para el alimento seleccionado -->
                 <com.google.android.material.card.MaterialCardView
                     android:id="@+id/cardAlimentoSeleccionado"
                     android:layout_width="match_parent"
@@ -168,13 +179,13 @@
                                 app:cornerRadius="12dp" />
                         </LinearLayout>
 
-                        <!-- DASHBOARD DE MACROS (DINÁMICO) -->
+                        <!-- Desglose dinámico de macros del ingrediente actual -->
                         <LinearLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:orientation="horizontal"
                             android:layout_marginTop="16dp">
-                            <!-- Kcal -->
+                            <!-- Calorías -->
                             <com.google.android.material.card.MaterialCardView
                                 android:layout_width="0dp"
                                 android:layout_weight="1"
@@ -193,7 +204,7 @@
                                     <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="kcal" android:textColor="#FFFFFF" android:textSize="10sp" />
                                 </LinearLayout>
                             </com.google.android.material.card.MaterialCardView>
-                            <!-- Prot -->
+                            <!-- Proteínas -->
                             <com.google.android.material.card.MaterialCardView
                                 android:layout_width="0dp"
                                 android:layout_weight="1"
@@ -212,7 +223,7 @@
                                     <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="prot" android:textColor="#64748B" android:textSize="10sp" />
                                 </LinearLayout>
                             </com.google.android.material.card.MaterialCardView>
-                            <!-- Carb -->
+                            <!-- Carbohidratos -->
                             <com.google.android.material.card.MaterialCardView
                                 android:layout_width="0dp"
                                 android:layout_weight="1"
@@ -255,7 +266,7 @@
 
                 <View android:layout_width="match_parent" android:layout_height="1dp" android:background="#CBD5E1" android:layout_marginVertical="20dp" />
 
-                <!-- LISTA DE INGREDIENTES AGREGADOS -->
+                <!-- Lista de ingredientes que se van sumando a la comida -->
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -271,7 +282,7 @@
                     android:layout_height="wrap_content"
                     android:minHeight="100dp" />
 
-                <!-- TOTALES Y GUARDADO -->
+                <!-- Sección: Totales acumulados y Selección de categoría -->
                 <com.google.android.material.card.MaterialCardView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -315,6 +326,7 @@
                                 android:background="@null" />
                         </FrameLayout>
 
+                        <!-- Botón de guardado final en Firestore -->
                         <com.google.android.material.button.MaterialButton
                             android:id="@+id/btnGuardarComida"
                             android:layout_width="match_parent"
@@ -331,7 +343,7 @@
         </androidx.core.widget.NestedScrollView>
     </LinearLayout>
 
-    <!-- Barra de navegación flotante (píldora) -->
+    <!-- Barra de navegación flotante -->
     <include layout="@layout/floating_bottom_nav" />
 
 </FrameLayout>

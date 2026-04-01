@@ -1,4 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!--
+    Layout para la pantalla de Perfil de Usuario.
+    Permite al usuario ingresar y editar sus datos biométricos y objetivos.
+    Incluye un formulario con campos de texto, selectores (Spinners) y una
+    tarjeta de resultados que destaca las calorías calculadas.
+-->
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
@@ -13,7 +19,7 @@
         android:layout_height="match_parent"
         android:orientation="vertical">
 
-        <!-- Header -->
+        <!-- Encabezado con título y botón de retroceso -->
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -38,7 +44,7 @@
                 android:textStyle="bold" />
         </RelativeLayout>
 
-        <!-- Scrollable Main Content -->
+        <!-- Contenido del formulario con scroll -->
         <ScrollView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
@@ -60,7 +66,7 @@
                     android:textStyle="bold"
                     android:layout_marginBottom="16dp" />
 
-                <!-- Title & Input Nombre -->
+                <!-- Campo Nombre -->
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -80,7 +86,7 @@
                     android:paddingHorizontal="16dp"
                     android:layout_marginBottom="16dp" />
 
-                <!-- Row 1: Edad & Sexo -->
+                <!-- Fila: Edad y Sexo -->
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -133,7 +139,7 @@
                     </LinearLayout>
                 </LinearLayout>
 
-                <!-- Row 2: Peso & Altura -->
+                <!-- Fila: Peso y Altura -->
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -189,7 +195,7 @@
                     </LinearLayout>
                 </LinearLayout>
 
-                <!-- Nivel de actividad -->
+                <!-- Nivel de actividad física -->
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -205,7 +211,7 @@
                     android:background="@drawable/rounded_edittext_bg"
                     android:layout_marginBottom="16dp" />
 
-                <!-- Objetivo -->
+                <!-- Objetivo nutricional -->
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -221,7 +227,7 @@
                     android:background="@drawable/rounded_edittext_bg"
                     android:layout_marginBottom="24dp" />
 
-                <!-- Highlight Box Calorias -->
+                <!-- Tarjeta destacada con las calorías calculadas -->
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -270,7 +276,7 @@
                         android:paddingVertical="8dp" />
                 </LinearLayout>
 
-                <!-- Buttons -->
+                <!-- Botones de acción del perfil -->
                 <com.google.android.material.button.MaterialButton
                     android:id="@+id/btnGuardarPerfil"
                     android:layout_width="match_parent"
@@ -297,6 +303,7 @@
                     android:layout_marginBottom="12dp"
                     app:cornerRadius="12dp" />
 
+                <!-- Botón destacado para cerrar sesión -->
                 <com.google.android.material.button.MaterialButton
                     android:id="@+id/btnIrCerrarSesion"
                     android:layout_width="match_parent"
@@ -316,7 +323,7 @@
         </ScrollView>
     </LinearLayout>
 
-    <!-- Barra de navegación flotante (píldora) -->
+    <!-- Inclusión de la barra de navegación flotante -->
     <include layout="@layout/floating_bottom_nav" />
 
 </FrameLayout>

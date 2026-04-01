@@ -1,19 +1,30 @@
+// Configuración de compilación para el módulo ':app'
 plugins {
+    // Plugin principal para aplicaciones Android
     alias(libs.plugins.android.application)
 
+    // Plugin para habilitar los servicios de Google (Firebase)
     id 'com.google.gms.google-services'
 }
 
 android {
+    // Espacio de nombres único de la aplicación
     namespace 'com.example.tif_gr31'
+    
+    // SDK utilizado para compilar el código
     compileSdk {
         version = release(36)
     }
 
     defaultConfig {
         applicationId "com.example.tif_gr31"
+        
+        // Versión mínima de Android soportada (Android 9.0 Pie)
         minSdk 28
+        
+        // Versión de Android a la que apunta la aplicación
         targetSdk 36
+        
         versionCode 1
         versionName "1.0"
 
@@ -22,10 +33,13 @@ android {
 
     buildTypes {
         release {
+            // Desactiva la ofuscación de código para simplificar el despliegue del TPI
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
+    
+    // Configuración de compatibilidad con Java 11
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_11
         targetCompatibility JavaVersion.VERSION_11
@@ -33,20 +47,27 @@ android {
 }
 
 dependencies {
+    // --- FIREBASE ---
+    // Bill of Materials (BOM) para gestionar versiones de Firebase de forma coherente
     implementation platform("com.google.firebase:firebase-bom:34.11.0")
     implementation "com.google.firebase:firebase-analytics"
-    implementation("com.google.firebase:firebase-auth")
-    implementation("com.google.firebase:firebase-firestore:26.1.2")
+    implementation("com.google.firebase:firebase-auth")      // Autenticación de usuarios
+    implementation("com.google.firebase:firebase-firestore:26.1.2") // Base de datos NoSQL
+
+    // --- INTERFAZ Y DISEÑO ---
     implementation libs.appcompat
     implementation libs.material
     implementation libs.activity
     implementation libs.constraintlayout
+
+    // --- PRUEBAS UNITARIAS ---
     testImplementation libs.junit
     androidTestImplementation libs.ext.junit
     androidTestImplementation libs.espresso.core
 
-    //retrofit
+    // --- RED Y API (RETROFIT) ---
+    // Retrofit para el consumo de la API de USDA FoodData Central
     implementation 'com.squareup.retrofit2:retrofit:2.9.0'
-    implementation 'com.squareup.retrofit2:converter-gson:2.9.0'
-    implementation 'com.squareup.okhttp3:logging-interceptor:4.12.0'
+    implementation 'com.squareup.retrofit2:converter-gson:2.9.0' // Conversor JSON a POJO
+    implementation 'com.squareup.okhttp3:logging-interceptor:4.12.0' // Logs de peticiones HTTP
 }

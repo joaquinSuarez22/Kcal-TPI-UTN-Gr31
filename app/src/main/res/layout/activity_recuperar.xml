@@ -1,4 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!--
+    Layout para la pantalla de Recuperación de Contraseña.
+    Permite al usuario solicitar un enlace de restablecimiento ingresando su email.
+    Sigue la línea visual de las pantallas de acceso, con botones Material Design
+    y un ScrollView para evitar problemas de visualización con el teclado.
+-->
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/main"
@@ -12,7 +18,7 @@
         android:orientation="vertical"
         android:padding="24dp">
 
-        <!-- Header -->
+        <!-- Encabezado con título y navegación hacia atrás -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -29,7 +35,8 @@
                 android:clickable="true"
                 android:focusable="true"
                 android:background="?attr/selectableItemBackgroundBorderless"
-                app:tint="@color/primary"/>
+                app:tint="@color/primary"
+                android:contentDescription="Volver" />
 
             <TextView
                 android:layout_width="0dp"
@@ -43,16 +50,17 @@
                 android:layout_marginEnd="48dp"/>
         </LinearLayout>
 
-        <!-- Icono -->
+        <!-- Icono representativo de seguridad/candado -->
         <ImageView
             android:layout_width="100dp"
             android:layout_height="100dp"
             android:layout_gravity="center"
             android:layout_marginTop="50dp"
             android:src="@android:drawable/ic_lock_power_off"
-            app:tint="@color/primary"/>
+            app:tint="@color/primary"
+            android:contentDescription="Icono de recuperación" />
 
-        <!-- Título -->
+        <!-- Título principal -->
         <TextView
             style="@style/TextAppearance.Kcal.Heading"
             android:layout_width="match_parent"
@@ -62,7 +70,7 @@
             android:gravity="center"
             android:layout_marginTop="30dp"/>
 
-        <!-- Descripción -->
+        <!-- Instrucciones para el usuario -->
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -73,7 +81,7 @@
             android:layout_marginTop="16dp"
             android:layout_marginBottom="32dp"/>
 
-        <!-- Email -->
+        <!-- Campo de entrada para el email -->
         <com.google.android.material.textfield.TextInputLayout
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
             android:layout_width="match_parent"
@@ -96,7 +104,7 @@
                 android:inputType="textEmailAddress" />
         </com.google.android.material.textfield.TextInputLayout>
 
-        <!-- Botón enviar -->
+        <!-- Botón para ejecutar el envío del correo -->
         <com.google.android.material.button.MaterialButton
             android:id="@+id/btnEnviar"
             android:layout_width="match_parent"
@@ -109,7 +117,7 @@
             android:backgroundTint="@color/primary"
             app:cornerRadius="12dp"/>
 
-        <!-- Mensaje -->
+        <!-- Aviso legal/informativo -->
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -119,7 +127,7 @@
             android:gravity="center"
             android:layout_marginTop="24dp"/>
 
-        <!-- Volver -->
+        <!-- Opción secundaria para volver al login -->
         <com.google.android.material.button.MaterialButton
             android:id="@+id/btnVolver"
             style="@style/Widget.MaterialComponents.Button.TextButton"

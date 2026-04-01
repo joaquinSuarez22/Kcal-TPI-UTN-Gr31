@@ -1,4 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!--
+    Layout para la pantalla de Historial de Comidas.
+    Utiliza un FrameLayout como raíz para superponer la navegación flotante.
+    Contiene un RecyclerView para listar las comidas y un layout informativo (layoutVacio)
+    que se muestra cuando no hay registros en la base de datos.
+-->
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
@@ -13,7 +19,7 @@
         android:layout_height="match_parent"
         android:orientation="vertical">
 
-        <!-- Header / Toolbar -->
+        <!-- Encabezado con título y botón de retroceso -->
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -39,11 +45,12 @@
                 android:textStyle="bold" />
         </RelativeLayout>
 
-        <!-- Main Content -->
+        <!-- Contenido Principal: RecyclerView o Estado Vacío -->
         <FrameLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
+            <!-- Lista de registros cronológicos -->
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/rvHistorial"
                 android:layout_width="match_parent"
@@ -53,6 +60,7 @@
                 android:paddingBottom="100dp"
                 android:visibility="gone" />
 
+            <!-- Vista informativa para cuando no hay datos -->
             <LinearLayout
                 android:id="@+id/layoutVacio"
                 android:layout_width="match_parent"
@@ -67,7 +75,8 @@
                     android:layout_height="100dp"
                     android:src="@android:drawable/ic_menu_recent_history"
                     app:tint="@color/primary"
-                    android:layout_marginBottom="16dp"/>
+                    android:layout_marginBottom="16dp"
+                    android:contentDescription="Sin registros" />
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -89,7 +98,7 @@
         </FrameLayout>
     </LinearLayout>
 
-    <!-- Barra de navegación flotante (píldora) -->
+    <!-- Inclusión de la barra de navegación flotante -->
     <include layout="@layout/floating_bottom_nav" />
 
 </FrameLayout>

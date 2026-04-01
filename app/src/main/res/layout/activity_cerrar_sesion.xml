@@ -1,4 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!--
+    Layout para la pantalla de Confirmación de Cierre de Sesión.
+    Presenta una interfaz centrada con un icono de advertencia/salida,
+    un mensaje explicativo y botones de acción para confirmar o cancelar la operación.
+    Incluye la barra de navegación flotante para mantener la consistencia visual.
+-->
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
@@ -13,7 +19,7 @@
         android:layout_height="match_parent"
         android:orientation="vertical">
 
-        <!-- Header / Toolbar -->
+        <!-- Encabezado con título de sección -->
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -39,7 +45,7 @@
                 android:textStyle="bold" />
         </RelativeLayout>
 
-        <!-- Main Content centered -->
+        <!-- Contenido central de confirmación -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
@@ -49,7 +55,7 @@
             android:paddingBottom="100dp"
             android:clipToPadding="false">
 
-            <!-- Logout Icon Container -->
+            <!-- Contenedor circular para el icono de salida -->
             <FrameLayout
                 android:layout_width="96dp"
                 android:layout_height="96dp"
@@ -61,10 +67,10 @@
                     android:layout_height="48dp"
                     android:layout_gravity="center"
                     android:src="@android:drawable/ic_lock_power_off"
-                    app:tint="#1c7d55" />
+                    app:tint="#1c7d55"
+                    android:contentDescription="Icono de cierre de sesión" />
             </FrameLayout>
 
-            <!-- Title -->
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -75,7 +81,6 @@
                 android:textSize="24sp"
                 android:textStyle="bold" />
 
-            <!-- Description -->
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -86,7 +91,7 @@
                 android:textColor="#475569"
                 android:textSize="16sp" />
 
-            <!-- Primary Button -->
+            <!-- Botón principal: Confirma la salida -->
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/btnConfirmarCerrarSesion"
                 android:layout_width="match_parent"
@@ -100,7 +105,7 @@
                 android:textStyle="bold"
                 app:cornerRadius="12dp" />
 
-            <!-- Secondary Outline Button -->
+            <!-- Botón secundario: Cancela y vuelve atrás -->
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/btnCancelar"
                 style="@style/Widget.MaterialComponents.Button.OutlinedButton"
@@ -118,7 +123,7 @@
         </LinearLayout>
     </LinearLayout>
 
-    <!-- Barra de navegación flotante (píldora) -->
+    <!-- Inclusión de la barra de navegación flotante -->
     <include layout="@layout/floating_bottom_nav" />
 
 </FrameLayout>

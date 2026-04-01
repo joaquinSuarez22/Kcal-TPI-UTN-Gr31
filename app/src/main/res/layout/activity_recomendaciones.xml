@@ -1,4 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!--
+    Layout para la pantalla de Recomendaciones Personalizadas.
+    Presenta una tarjeta central (MaterialCardView) que muestra un consejo nutricional
+    basado en el comportamiento de la última semana. Incluye un icono visual grande (emoji),
+    un título destacado y un texto explicativo detallado.
+-->
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
@@ -13,7 +19,7 @@
         android:layout_height="match_parent"
         android:orientation="vertical">
 
-        <!-- Header -->
+        <!-- Encabezado con título y navegación hacia atrás -->
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -28,7 +34,8 @@
                 app:tint="#1c7d55"
                 android:clickable="true"
                 android:focusable="true"
-                android:background="?attr/selectableItemBackgroundBorderless"/>
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:contentDescription="Volver" />
 
             <TextView
                 android:id="@+id/tvHeaderTitle"
@@ -41,6 +48,7 @@
                 android:textStyle="bold" />
         </RelativeLayout>
 
+        <!-- Contenido principal con scroll -->
         <ScrollView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
@@ -53,7 +61,7 @@
                 android:orientation="vertical"
                 android:padding="24dp">
 
-                <!-- Resumen de consumo -->
+                <!-- Resumen informativo sobre el cálculo del progreso -->
                 <TextView
                     android:id="@+id/tvConsumoPromedio"
                     android:layout_width="match_parent"
@@ -64,7 +72,7 @@
                     android:gravity="center"
                     android:layout_marginBottom="24dp" />
 
-                <!-- Card de Recomendación Principal -->
+                <!-- Card central: El sistema experto muestra aquí su consejo -->
                 <com.google.android.material.card.MaterialCardView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -80,7 +88,7 @@
                         android:gravity="center"
                         android:padding="32dp">
 
-                        <!-- Icono Emoji -->
+                        <!-- Icono visual representativo (Emoji grande) -->
                         <TextView
                             android:id="@+id/tvEmojiIcono"
                             android:layout_width="wrap_content"
@@ -89,7 +97,7 @@
                             android:textSize="80sp"
                             android:layout_marginBottom="16dp" />
 
-                        <!-- Título -->
+                        <!-- Título de la recomendación -->
                         <TextView
                             android:id="@+id/tvTituloRecomendacion"
                             android:layout_width="wrap_content"
@@ -101,13 +109,14 @@
                             android:gravity="center"
                             android:layout_marginBottom="12dp" />
 
+                        <!-- Separador visual minimalista -->
                         <View
                             android:layout_width="60dp"
                             android:layout_height="4dp"
                             android:background="#1A1C7D55"
                             android:layout_marginBottom="20dp" />
 
-                        <!-- Texto Descriptivo -->
+                        <!-- Descripción detallada y personalizada -->
                         <TextView
                             android:id="@+id/tvTextoRecomendacion"
                             android:layout_width="match_parent"
@@ -121,7 +130,7 @@
                     </LinearLayout>
                 </com.google.android.material.card.MaterialCardView>
 
-                <!-- Botones de Acción -->
+                <!-- Botón de confirmación/lectura -->
                 <com.google.android.material.button.MaterialButton
                     android:id="@+id/btnVolverInicio"
                     android:layout_width="match_parent"
@@ -135,6 +144,7 @@
                     app:cornerRadius="12dp"
                     android:layout_marginBottom="16dp" />
 
+                <!-- Nota informativa sobre la fuente de datos -->
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -147,7 +157,7 @@
         </ScrollView>
     </LinearLayout>
 
-    <!-- Barra de navegación flotante (píldora) -->
+    <!-- Inclusión de la barra de navegación flotante -->
     <include layout="@layout/floating_bottom_nav" />
 
 </FrameLayout>

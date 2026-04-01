@@ -1,4 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!--
+    Layout para la pantalla de Debug (Herramientas de Desarrollo).
+    Contiene controles para realizar acciones de prueba, como la generación
+    de datos falsos (Fake Data) para verificar el comportamiento de los gráficos
+    y el sistema de recomendaciones sin necesidad de carga manual.
+-->
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"

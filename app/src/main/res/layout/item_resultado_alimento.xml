@@ -1,4 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!--
+    Layout para cada ítem en la lista de resultados de búsqueda de alimentos.
+    Diseñado para ser simple y facilitar la selección rápida:
+    - Muestra el nombre descriptivo del alimento.
+    - Indica el valor energético base (kcal por cada 100g).
+    - Incluye una flecha indicadora para denotar interactividad.
+-->
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
@@ -13,16 +20,17 @@
     android:focusable="true"
     android:foreground="?attr/selectableItemBackground">
 
-    <!-- Ícono alimento -->
+    <!-- Ícono visual para resaltar la acción de añadir -->
     <ImageView
         android:layout_width="36dp"
         android:layout_height="36dp"
         android:src="@android:drawable/ic_menu_add"
         android:backgroundTint="#DEF4C6"
         android:padding="6dp"
-        app:tint="#1C7C54" />
+        app:tint="#1C7C54"
+        android:contentDescription="Añadir alimento" />
 
-    <!-- Nombre + kcal -->
+    <!-- Información principal del alimento (Nombre y Calorías base) -->
     <LinearLayout
         android:layout_width="0dp"
         android:layout_height="wrap_content"
@@ -51,11 +59,12 @@
             android:layout_marginTop="2dp" />
     </LinearLayout>
 
-    <!-- Flecha derecha -->
+    <!-- Indicador visual de navegación/selección -->
     <ImageView
         android:layout_width="20dp"
         android:layout_height="20dp"
         android:src="@android:drawable/ic_media_next"
-        app:tint="#CBD5E1" />
+        app:tint="#CBD5E1"
+        android:contentDescription="Seleccionar" />
 
 </LinearLayout>

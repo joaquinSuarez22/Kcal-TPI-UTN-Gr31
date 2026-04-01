@@ -1,4 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!--
+    Definición del menú para la barra de navegación inferior (Bottom Navigation).
+    Contiene los ítems principales de la aplicación: Inicio, Historial, Estadísticas y Perfil.
+    Cada ítem tiene un ID único que se utiliza en NavigationHelper para gestionar los clics.
+-->
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
     <item
