@@ -45,6 +45,59 @@
                 android:textStyle="bold" />
         </RelativeLayout>
 
+        <!-- Selector de periodo de tiempo (Filtros) -->
+        <LinearLayout
+            android:id="@+id/periodSelector"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center"
+            android:paddingVertical="8dp">
+
+            <TextView
+                android:id="@+id/tvPeriodoDia"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="DÍA"
+                android:textStyle="bold"
+                android:textColor="#64748b"
+                android:paddingHorizontal="16dp"
+                android:paddingVertical="8dp" />
+
+            <TextView
+                android:id="@+id/tvPeriodoSemana"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="SEMANA"
+                android:textStyle="bold"
+                android:textColor="#1c7d55"
+                android:paddingHorizontal="16dp"
+                android:paddingVertical="8dp" />
+
+            <TextView
+                android:id="@+id/tvPeriodoMes"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="MES"
+                android:textStyle="bold"
+                android:textColor="#64748b"
+                android:paddingHorizontal="16dp"
+                android:paddingVertical="8dp" />
+
+            <!-- Icono de Calendario para elegir día específico -->
+            <ImageView
+                android:id="@+id/btnCalendario"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:padding="8dp"
+                android:src="@android:drawable/ic_menu_my_calendar"
+                app:tint="#64748b"
+                android:clickable="true"
+                android:focusable="true"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:contentDescription="Elegir fecha" />
+        </LinearLayout>
+
         <!-- Contenido Principal: RecyclerView o Estado Vacío -->
         <FrameLayout
             android:layout_width="match_parent"
@@ -79,6 +132,7 @@
                     android:contentDescription="Sin registros" />
 
                 <TextView
+                    android:id="@+id/tvMensajeVacio"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Tu historial aparecerá aquí"
@@ -87,6 +141,7 @@
                     android:textStyle="bold" />
 
                 <TextView
+                    android:id="@+id/tvSubMensajeVacio"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="8dp"

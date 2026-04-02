@@ -29,13 +29,14 @@
             android:contentDescription="App Logo" />
 
         <!-- Encabezado de bienvenida -->
+
         <TextView
             style="@style/TextAppearance.Kcal.Heading"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="24dp"
             android:gravity="center"
-            android:text="¡Bienvenido de nuevo!"
+            android:text="¡Bienvenido!"
             android:textSize="28sp" />
 
         <TextView
