@@ -29,6 +29,7 @@ import com.example.tif_gr31.R;
 import com.example.tif_gr31.api.ApiClient;
 import com.example.tif_gr31.api.FoodProduct;
 import com.example.tif_gr31.api.FoodSearchResponse;
+import com.example.tif_gr31.utils.CsvFoodHelper;
 import com.example.tif_gr31.utils.FloatingNavigationHelper;
 import com.google.android.material.button.MaterialButton;
 import com.google.firebase.auth.FirebaseAuth;
@@ -51,15 +52,11 @@ import com.google.android.material.card.MaterialCardView;
 
 /**
  * Actividad encargada de la búsqueda de alimentos y el registro de comidas.
- * Permite buscar productos en la API de USDA, calcular sus nutrientes según el peso ingresado,
- * listar múltiples ingredientes y guardar la comida completa en Cloud Firestore.
+ * Configurada actualmente para usar ÚNICAMENTE la base de datos local (CSV).
  */
 public class RegistrarComidaActivity extends AppCompatActivity {
 
-    // Clave de API para USDA FoodData Central
     private static final String USDA_API_KEY = "BpuqGxfs81r5NeHjS2pe7fdWV2fRJY5vKd59lgnI";
-    
-    // Categorías predefinidas de comidas
     private static final String[] TIPOS_COMIDA = {"Desayuno", "Almuerzo", "Merienda", "Cena", "Snacks"};
 
     private EditText etBuscarAlimento, etGramos;
@@ -74,17 +71,14 @@ public class RegistrarComidaActivity extends AppCompatActivity {
     private FirebaseFirestore db;
     private FirebaseAuth auth;
 
-    // Listas para gestionar resultados de búsqueda e ingredientes seleccionados
     private final List<Map<String, Object>> listaResultados = new ArrayList<>();
     private final List<Map<String, Object>> listaIngredientes = new ArrayList<>();
     private ResultadosAdapter resultadosAdapter;
     private IngredientesAdapter ingredientesAdapter;
 
-    // Estado del alimento que se está configurando actualmente
     private FoodProduct alimentoActual;
     private double totalKcal = 0, totalProt = 0, totalCarb = 0, totalGrasa = 0;
 
-    // Manejador para implementar 'debounce' en la búsqueda (evita peticiones excesivas)
     private final Handler debounceHandler = new Handler(Looper.getMainLooper());
     private Runnable debouncedSearch;
 
@@ -95,7 +89,6 @@ public class RegistrarComidaActivity extends AppCompatActivity {
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_registrar_comida);
 
-        // Ajuste de paddings para respetar las barras del sistema
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.registrarComidaMain), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
@@ -111,13 +104,9 @@ public class RegistrarComidaActivity extends AppCompatActivity {
         configurarSpinner();
         configurarCampoGramos();
 
-        // Si se inició desde el Dashboard con una categoría específica, se preselecciona
         manejarCategoriaPreseleccionada();
-
-        // Navegación flotante (sin item seleccionado ya que no es una pantalla principal del menú)
         FloatingNavigationHelper.setupFloatingNavigation(this, -1);
 
-        // Listeners de acciones principales
         btnAgregarIngrediente.setOnClickListener(v -> agregarIngredienteALista());
         btnGuardarComida.setOnClickListener(v -> guardarComidaCompleta());
         findViewById(R.id.btnBack).setOnClickListener(v -> finish());
@@ -163,10 +152,6 @@ public class RegistrarComidaActivity extends AppCompatActivity {
         rvIngredientesAgregados.setAdapter(ingredientesAdapter);
     }
 
-    /**
-     * Configura el buscador con un TextWatcher.
-     * Implementa un retraso (debounce) de 600ms antes de realizar la petición a la API.
-     */
     private void configurarBusqueda() {
         etBuscarAlimento.addTextChangedListener(new TextWatcher() {
             @Override public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
@@ -183,8 +168,9 @@ public class RegistrarComidaActivity extends AppCompatActivity {
                     return;
                 }
                 
-                debouncedSearch = () -> buscarEnUSDA(query);
-                debounceHandler.postDelayed(debouncedSearch, 600);
+                // Ahora solo usamos la búsqueda en CSV
+                debouncedSearch = () -> ejecutarBusquedaCSV(query);
+                debounceHandler.postDelayed(debouncedSearch, 300); // Más rápido al ser local
             }
         });
 
@@ -195,9 +181,59 @@ public class RegistrarComidaActivity extends AppCompatActivity {
     }
 
     /**
-     * Listener para el campo de gramos. Recalcula los nutrientes en tiempo real
-     * mientras el usuario escribe el peso del alimento seleccionado.
+     * Búsqueda utilizando únicamente el archivo CSV local.
+     * La lógica de la API de USDA queda comentada para pruebas.
      */
+    private void ejecutarBusquedaCSV(String query) {
+        listaResultados.clear();
+        
+        // 1. Buscar en CSV Local
+        List<FoodProduct> locales = CsvFoodHelper.buscarEnCsv(this, query);
+        for (FoodProduct f : locales) {
+            Map<String, Object> map = new HashMap<>();
+            map.put("nombre", f.getNombre());
+            map.put("kcal", f.getKcal());
+            map.put("rawObject", f);
+            listaResultados.add(map);
+        }
+
+        /* 
+        // 2. [COMENTADO] Buscar en API USDA
+        ApiClient.getService().buscarAlimentos(query, USDA_API_KEY, 10).enqueue(new Callback<FoodSearchResponse>() {
+            @Override
+            public void onResponse(Call<FoodSearchResponse> call, Response<FoodSearchResponse> response) {
+                if (response.isSuccessful() && response.body() != null) {
+                    List<FoodProduct> foods = response.body().getFoods();
+                    if (foods != null) {
+                        for (FoodProduct f : foods) {
+                            Map<String, Object> map = new HashMap<>();
+                            map.put("nombre", f.getNombre());
+                            map.put("kcal", f.getKcal());
+                            map.put("rawObject", f);
+                            listaResultados.add(map);
+                        }
+                    }
+                }
+                runOnUiThread(() -> {
+                    resultadosAdapter.notifyDataSetChanged();
+                    rvResultadosBusqueda.setVisibility(listaResultados.isEmpty() ? View.GONE : View.VISIBLE);
+                });
+            }
+            @Override
+            public void onFailure(Call<FoodSearchResponse> call, Throwable t) {
+                runOnUiThread(() -> {
+                    resultadosAdapter.notifyDataSetChanged();
+                    rvResultadosBusqueda.setVisibility(listaResultados.isEmpty() ? View.GONE : View.VISIBLE);
+                });
+            }
+        });
+        */
+
+        // Notificación inmediata al ser local
+        resultadosAdapter.notifyDataSetChanged();
+        rvResultadosBusqueda.setVisibility(listaResultados.isEmpty() ? View.GONE : View.VISIBLE);
+    }
+
     private void configurarCampoGramos() {
         etGramos.addTextChangedListener(new TextWatcher() {
             @Override public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
@@ -208,9 +244,6 @@ public class RegistrarComidaActivity extends AppCompatActivity {
         });
     }
 
-    /**
-     * Calcula los nutrientes proporcionales a los gramos ingresados (basado en 100g).
-     */
     private void recalcularMacrosTemporales() {
         if (alimentoActual == null) return;
         String gramosStr = etGramos.getText().toString().trim();
@@ -244,39 +277,6 @@ public class RegistrarComidaActivity extends AppCompatActivity {
         spinnerTipoComida.setAdapter(adapter);
     }
 
-    /**
-     * Realiza la llamada asíncrona a la API de USDA para obtener una lista de alimentos.
-     */
-    private void buscarEnUSDA(String query) {
-        ApiClient.getService().buscarAlimentos(query, USDA_API_KEY, 15).enqueue(new Callback<FoodSearchResponse>() {
-            @Override
-            public void onResponse(Call<FoodSearchResponse> call, Response<FoodSearchResponse> response) {
-                if (response.isSuccessful() && response.body() != null) {
-                    List<FoodProduct> foods = response.body().getFoods();
-                    listaResultados.clear();
-                    if (foods != null) {
-                        for (FoodProduct f : foods) {
-                            Map<String, Object> map = new HashMap<>();
-                            map.put("nombre", f.getNombre());
-                            map.put("kcal", f.getKcal());
-                            map.put("rawObject", f);
-                            listaResultados.add(map);
-                        }
-                    }
-                    runOnUiThread(() -> {
-                        resultadosAdapter.notifyDataSetChanged();
-                        rvResultadosBusqueda.setVisibility(listaResultados.isEmpty() ? View.GONE : View.VISIBLE);
-                    });
-                }
-            }
-            @Override
-            public void onFailure(Call<FoodSearchResponse> call, Throwable t) {}
-        });
-    }
-
-    /**
-     * Acción al seleccionar un alimento de la lista de resultados de búsqueda.
-     */
     private void onAlimentoSeleccionadoDeBusqueda(Map<String, Object> map) {
         alimentoActual = (FoodProduct) map.get("rawObject");
         tvNombreAlimentoSeleccionado.setText(alimentoActual.getNombre());
@@ -286,10 +286,6 @@ public class RegistrarComidaActivity extends AppCompatActivity {
         recalcularMacrosTemporales();
     }
 
-    /**
-     * Agrega el ingrediente configurado (alimento + peso) a la lista de la comida actual.
-     * Actualiza los totales acumulados.
-     */
     private void agregarIngredienteALista() {
         String gramosStr = etGramos.getText().toString();
         if (gramosStr.isEmpty() || alimentoActual == null) return;
@@ -312,7 +308,6 @@ public class RegistrarComidaActivity extends AppCompatActivity {
 
         listaIngredientes.add(ingrediente);
 
-        // Acumulación de totales para la comida completa
         totalKcal += kcalFinal;
         totalProt += protFinal;
         totalCarb += carbFinal;
@@ -321,24 +316,17 @@ public class RegistrarComidaActivity extends AppCompatActivity {
         actualizarResumenTotales();
         ingredientesAdapter.notifyDataSetChanged();
 
-        // Resetea el estado para el siguiente ingrediente
         alimentoActual = null;
         cardAlimentoSeleccionado.setVisibility(View.GONE);
         etBuscarAlimento.setText("");
         etGramos.setText("");
     }
 
-    /**
-     * Muestra la suma total de nutrientes de todos los ingredientes agregados.
-     */
     private void actualizarResumenTotales() {
         tvTotalCalorias.setText(String.format(Locale.getDefault(), "Total: %.0f kcal", totalKcal));
         tvTotalMacros.setText(String.format(Locale.getDefault(), "P: %.1fg | C: %.1fg | G: %.1fg", totalProt, totalCarb, totalGrasa));
     }
 
-    /**
-     * Crea un objeto consolidado de la comida y lo guarda en la subcolección "comidas" de Firestore.
-     */
     private void guardarComidaCompleta() {
         if (listaIngredientes.isEmpty()) {
             Toast.makeText(this, "Añade al menos un ingrediente", Toast.LENGTH_SHORT).show();
@@ -365,16 +353,11 @@ public class RegistrarComidaActivity extends AppCompatActivity {
                 .add(comidaMap)
                 .addOnSuccessListener(documentReference -> {
                     Toast.makeText(this, "Comida guardada exitosamente", Toast.LENGTH_SHORT).show();
-                    finish(); // Cierra y vuelve al Dashboard
+                    finish();
                 })
                 .addOnFailureListener(e -> Toast.makeText(this, "Error al guardar en la base de datos", Toast.LENGTH_SHORT).show());
     }
 
-    // --- ADAPTERS INTERNOS PARA LOS RECYCLERVIEWS ---
-
-    /**
-     * Adaptador para mostrar los resultados devueltos por la API de USDA.
-     */
     private class ResultadosAdapter extends RecyclerView.Adapter<ResultadosAdapter.ViewHolder> {
         private final List<Map<String, Object>> items;
         private final OnItemClickListener listener;
@@ -411,9 +394,6 @@ public class RegistrarComidaActivity extends AppCompatActivity {
         }
     }
 
-    /**
-     * Adaptador para mostrar la lista de ingredientes que el usuario está agregando.
-     */
     private class IngredientesAdapter extends RecyclerView.Adapter<IngredientesAdapter.ViewHolder> {
         private final List<Map<String, Object>> items;
         public IngredientesAdapter(List<Map<String, Object>> items) { this.items = items; }
