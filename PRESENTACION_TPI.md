@@ -1,96 +1,109 @@
-# Guía de Presentación: App Kcal (TIF Gr31)
+# Guía de Presentación: App Kcal (TIF Gr31) - Versión Final
 
-Este documento contiene la estructura sugerida, los textos para las diapositivas y los puntos clave para hablar frente a los profesores durante la defensa del proyecto.
+Esta es la estructura optimizada para tu presentación en Canva. He reorganizado el orden para que la explicación fluya de forma lógica (Problema -> Solución -> Implementación -> Demostración técnica) e incluido consejos visuales para tus mockups.
 
 ---
 
-## Estructura de Diapositivas (Canva)
+## Estructura Sugerida de Diapositivas
 
-### Slide 1: Portada
-*   **Título:** Kcal - Gestión Nutricional Inteligente
-*   **Subtítulo:** Trabajo Integrador Final - Programación en Dispositivos Móviles
+### 1. Carátula
+*   **Título:** Kcal - Gestión Nutricional Inteligente.
+*   **Subtítulo:** Trabajo Integrador Final - Programación en Dispositivos Móviles.
+*   **Visual:** Logo de la app y logo de la UTN.
+*   **Hablar:** Presentación formal y bienvenida.
+
+### 2. Integrantes
+*   **Contenido:** Nombres de los integrantes.
+*   **Visual:** Iconos representativos o foto grupal.
+
+### 3. La Problemática Actual
+*   **Título:** El desafío de la nutrición consciente.
 *   **Contenido:** 
-    *   Nombre de los integrantes.
-    *   Logo de la app.
-    *   Universidad Tecnológica Nacional (UTN).
-*   **Punto clave para hablar:** Saludar, presentar el nombre del proyecto y explicar que Kcal es una solución integral para personas que buscan no solo contar calorías, sino entender su balance nutricional real.
+    *   Dificultad para llevar un registro constante.
+    *   Falta de datos locales (la mayoría de las apps están en inglés).
+    *   Barreras por falta de conexión a internet constante.
+*   **Hablar:** "Mucha gente abandona sus dietas porque registrar lo que comen es difícil, está en otro idioma o las apps no funcionan sin internet."
 
-### Slide 2: El Problema y la Solución
-*   **Título:** ¿Por qué Kcal?
-*   **Contenido:**
-    *   **Problema:** La dificultad de llevar un registro manual y la falta de precisión en los datos nutricionales.
-    *   **Solución:** Una herramienta móvil persistente que consume datos oficiales y ofrece feedback personalizado.
-*   **Punto clave para hablar:** Mencionar que muchas apps son complejas o no son precisas. Kcal simplifica el proceso usando una API internacional (USDA) y cálculos metabólicos probados.
+### 4. Nuestra Solución: Kcal
+*   **Título:** Kcal: Tu aliado nutricional.
+*   **Contenido:** Una app móvil simple, accesible y con base de datos local (offline) optimizada para nuestra región.
+*   **Hablar:** Definir la app como un ecosistema que automatiza el seguimiento y funciona en cualquier momento.
 
-### Slide 3: Stack Tecnológico
-*   **Título:** Tecnologías Utilizadas
+### 5. Objetivos del Proyecto
 *   **Contenido:**
+    *   Proveer una herramienta offline para búsqueda de alimentos.
+    *   Automatizar el cálculo de requerimientos energéticos.
+    *   Ofrecer feedback inteligente mediante un sistema experto.
+
+### 6. Características Principales (Píldoras)
+*   **Contenido:** 
+    1. Aplicación móvil simple y accesible 📱
+    2. Cálculo automático de calorías 🔢
+    3. Control diario de la alimentación 🥗
+    4. Registro de comidas fácil y rápido ⚡
+    5. Recomendaciones para mejorar hábitos 💡
+    6. Sincronización y Seguridad ☁️
+*   **Hablar:** Recorrer los 6 pilares que hacen a la app robusta y completa.
+
+### 7. Plataforma y Stack Tecnológico
+*   **Título:** El "Motor" de Kcal.
+*   **Contenido:** 
     *   **Lenguaje:** Java 11.
-    *   **Backend:** Firebase (Authentication & Firestore).
-    *   **Red:** Retrofit 2 + GSON.
-    *   **Datos:** API de USDA (FoodData Central).
-    *   **Diseño:** Google Material Design.
-*   **Punto clave para hablar:** Explicar que se eligió Java por su robustez y Firebase por su capacidad de sincronización en tiempo real y persistencia NoSQL.
+    *   **Base de Datos:** Firebase Firestore (Cloud) + CSV Local (Offline).
+    *   **Arquitectura:** Singleton, RecyclerViews y Gráficos Dinámicos.
+*   **Hablar:** Destacar que usamos un enfoque híbrido de datos para mayor velocidad.
 
-### Slide 4: Arquitectura del Sistema
-*   **Título:** Arquitectura y Patrones
-*   **Contenido:**
-    *   **Patrón Singleton:** Para la gestión de la instancia de Retrofit (`ApiClient`).
-    *   **Modelado NoSQL:** Documentos de usuario con subcolecciones de comidas.
-    *   **Estandarización:** Uso de un archivo central de documentación técnica para coherencia del equipo.
-*   **Punto clave para hablar:** Destacar cómo organizamos los datos en Firestore para que el historial sea escalable y fácil de consultar por fechas.
+### 8. Creación de Perfil y Objetivos (Pantalla Perfil)
+*   **Título:** Personalización Metabólica.
+*   **Contenido:** Algoritmo **Harris-Benedict**.
+*   **Visual:** Mockup de `PerfilActivity`.
+*   **Hablar:** "Calculamos la TMB del usuario y ajustamos sus calorías según su objetivo (Bajar peso, Mantener o Ganar músculo)."
 
-### Slide 5: Funcionalidad: Dashboard Principal
-*   **Título:** Panel de Control (Dashboard)
-*   **Contenido:**
-    *   Cálculo dinámico de calorías restantes.
-    *   Progreso visual de Macronutrientes (Carbos, Proteínas, Grasas).
-    *   Acceso rápido por categorías de comida (Desayuno, Almuerzo, etc.).
-*   **Punto clave para hablar:** Mostrar la pantalla de Inicio. Explicar que el dashboard se reinicia cada día y busca los datos de Firestore en tiempo real para dar feedback inmediato al usuario.
+### 9. Dashboard e Inicio (Pantalla de Inicio)
+*   **Título:** Control en tiempo real.
+*   **Contenido:** Calorías restantes y balance de Macronutrientes.
+*   **Visual:** Mockup de `InicioActivity` con los círculos de progreso.
 
-### Slide 6: Registro de Comida Avanzado
-*   **Título:** Búsqueda y Registro Inteligente
-*   **Contenido:**
-    *   **Debounce Search:** Optimización de llamadas a la API (espera de 600ms).
-    *   **Calculadora Dinámica:** Nutrientes proporcionales al peso ingresado.
-    *   **Multi-ingrediente:** Posibilidad de armar una comida con varios elementos antes de guardar.
-*   **Punto clave para hablar:** Mencionar el "Debounce" como un detalle técnico de calidad para no saturar el servidor y mejorar la experiencia de usuario (UX).
+### 10. Registro Híbrido y Base de Datos CSV (Pantalla Registrar Comida)
+*   **Título:** Registro instantáneo en español.
+*   **Contenido:** 
+    *   Base de datos local **INCAPTCA2009**.
+    *   Búsqueda offline de alimentos.
+    *   Cálculo dinámico por gramos.
+*   **Visual:** Mockup de la búsqueda con resultados inmediatos.
+*   **Hablar:** "Priorizamos la velocidad: la búsqueda es local, en español y extremadamente rápida."
 
-### Slide 7: Historial y Filtrado
-*   **Título:** Historial y Control de Datos
-*   **Contenido:**
-    *   Visualización cronológica de registros.
-    *   **Filtrado por Periodos:** Vista por Día, Semana o Mes.
-    *   **Filtro por Calendario:** Selector de fecha específica en español.
-*   **Punto clave para hablar:** Explicar el desafío técnico de filtrar datos en Firestore usando `whereGreaterThanOrEqualTo` y cómo implementamos el `DatePickerDialog` para mayor flexibilidad.
+### 11. Historial y Calendario Inteligente
+*   **Título:** Tu historial bajo control.
+*   **Contenido:** 
+    *   Filtros rápidos (Día, Semana, Mes).
+    *   Búsqueda por calendario (DatePicker en español).
+*   **Visual:** Mockup de `HistorialActivity` con el selector de fecha.
+*   **Hablar:** "El usuario puede auditar cualquier día pasado con solo dos toques."
 
-### Slide 8: Análisis y Recomendaciones
-*   **Título:** El "Cerebro" de la App
-*   **Contenido:**
-    *   **Estadísticas:** Gráficos de barras dinámicos y distribución porcentual.
-    *   **Sistema Experto:** Recomendaciones basadas en el promedio semanal vs. objetivos.
-    *   **Algoritmo:** Fórmula de Harris-Benedict para el gasto energético.
-*   **Punto clave para hablar:** Este es el valor agregado. La app no solo guarda datos, sino que los analiza y le dice al usuario "vas por buen camino" o "estás consumiendo poco para tu objetivo de ganar músculo".
+### 12. Visualización y Recomendaciones (Estadísticas)
+*   **Título:** Análisis y Sistema Experto.
+*   **Contenido:** 
+    *   Gráficos de evolución diaria por código.
+    *   Consejos personalizados basados en promedios semanales.
+*   **Visual:** Mockup de la pantalla de Estadísticas.
+*   **Hablar:** "La app analiza la tendencia y le da al usuario consejos reales: 'vas bien', 'comé más proteína', etc."
 
-### Slide 9: Experiencia de Usuario (UX)
-*   **Título:** Diseño y Navegación
-*   **Contenido:**
-    *   **Barra Flotante:** Navegación personalizada tipo "píldora".
-    *   **Animaciones:** Transiciones fluidas y feedback visual de botones.
-    *   **Accesibilidad:** Textos claros y paleta de colores coherente (Verdes/Neutros).
-*   **Punto clave para hablar:** Resaltar el `FloatingNavigationHelper`, que es una solución propia para que la app se sienta moderna y diferente a las plantillas estándar de Android.
-
-### Slide 10: Conclusiones
-*   **Título:** Conclusiones y Futuro
-*   **Contenido:**
-    *   Integración exitosa de múltiples servicios (API, DB, Auth).
-    *   Código documentado y mantenible.
-    *   Próximos pasos: Integración con sensores (podómetro) y modo offline.
-*   **Punto clave para hablar:** Finalizar agradeciendo el tiempo y mencionando qué fue lo que más aprendieron durante el desarrollo del proyecto (ej: manejo de asincronismo con Retrofit).
+### 13. Conclusiones y Q&A
+*   **Título:** ¡Muchas gracias!
+*   **Contenido:** Espacio para preguntas y demo en vivo.
 
 ---
 
-## Consejos para la presentación:
-1.  **Demo en vivo:** Si es posible, tengan el celular o el emulador listo para mostrar el registro de una comida real.
-2.  **Código fuente:** Estén preparados para mostrar el `ApiClient` o la lógica de filtrado del `HistorialActivity` si preguntan algo técnico.
-3.  **Seguridad:** Recuerden mencionar que las contraseñas están protegidas por Firebase Auth.
+## Guía de Estilo Visual para Mockups (Canva)
+
+Para que tu presentación impacte, usa estos estilos en tus imágenes:
+
+1.  **Connected Story (Slides 3-6):** Usa 3 teléfonos inclinados con una línea verde (`#1C7C54`) que fluya entre ellos, conectando las pantallas.
+2.  **Clean Mockup (Slides 8-11):** Fondo blanco puro, el teléfono en el centro y títulos en **Bold** arriba. Muy minimalista.
+3.  **Dynamic Stack (Slide 12):** Varias pantallas "flotando" una encima de otra con sombras suaves para mostrar la profundidad de los datos.
+
+**Colores Clave:**
+*   **Verde Principal:** `#1C7C54` (Botones e Iconos)
+*   **Verde Fondo:** `#DEF4C6` (Fondos de Slides)
+*   **Gris Texto:** `#334155` (Lectura)
